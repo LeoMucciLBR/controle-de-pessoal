@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { SettingsProvider } from "@/contexts/SettingsContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,8 +25,12 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
           >
-            <ThemeToggle />
-            {children}
+            <SettingsProvider>
+                <div className="fixed top-4 right-4 z-50">
+                   <ThemeToggle />
+                </div>
+                {children}
+            </SettingsProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -12,7 +12,7 @@ import { BulkActionsBar } from '@/components/BulkActionsBar';
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog';
 import { mockPeople } from '@/lib/mock-data';
 import { FilterState, Person } from '@/types/person';
-import { PersonFormModal } from '@/components/PersonFormModal';
+import { PersonFormModal } from '@/components/PersonFormModalNew';
 import { toast } from 'sonner';
 
 const initialFilters: FilterState = {
