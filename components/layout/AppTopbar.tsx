@@ -10,7 +10,7 @@ import {
   Menu,
   X,
   LogOut,
-  UserPlus
+  Settings
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { PersonFormModal } from '@/components/PersonFormModalNew';
+import { SettingsModal } from '@/components/SettingsModal';
 
 const navItems = [
   { to: '/dashboard', icon: Users, label: 'Pessoas' },
@@ -31,15 +31,11 @@ const navItems = [
   { to: '/empresas', icon: Building2, label: 'Empresas' },
 ];
 
+
 export function AppTopbar() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [cadastroModalOpen, setCadastroModalOpen] = useState(false);
-
-  const handleCadastroSave = (person: any) => {
-    // This will be handled by the parent component or context
-    console.log('Person saved:', person);
-  };
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
 
   return (
     <>
@@ -85,13 +81,13 @@ export function AppTopbar() {
                 );
               })}
 
-              {/* Cadastro Button - Opens Modal */}
+              {/* Configurações Button - Opens Modal */}
               <button
-                onClick={() => setCadastroModalOpen(true)}
+                onClick={() => setSettingsModalOpen(true)}
                 className="relative flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors text-muted-foreground hover:text-foreground hover:bg-muted"
               >
-                <UserPlus size={18} />
-                <span>Cadastro</span>
+                <Settings size={18} />
+                <span>Configurações</span>
               </button>
             </nav>
           </div>
@@ -172,16 +168,16 @@ export function AppTopbar() {
                   );
                 })}
 
-                {/* Cadastro Button - Mobile */}
+                {/* Configurações Button - Mobile */}
                 <button
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    setCadastroModalOpen(true);
+                    setSettingsModalOpen(true);
                   }}
                   className="flex items-center gap-3 px-3 py-3 rounded-md text-sm font-medium transition-colors text-muted-foreground hover:bg-muted hover:text-foreground w-full text-left"
                 >
-                  <UserPlus size={20} />
-                  <span>Cadastro</span>
+                  <Settings size={20} />
+                  <span>Configurações</span>
                 </button>
                 
                 <div className="border-t border-border my-2 pt-2">
@@ -206,11 +202,10 @@ export function AppTopbar() {
         </AnimatePresence>
       </header>
 
-      {/* Cadastro Modal */}
-      <PersonFormModal
-        open={cadastroModalOpen}
-        onOpenChange={setCadastroModalOpen}
-        onSave={handleCadastroSave}
+      {/* Settings Modal */}
+      <SettingsModal
+        open={settingsModalOpen}
+        onOpenChange={setSettingsModalOpen}
       />
     </>
   );

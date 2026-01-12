@@ -6,29 +6,87 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
+// ============================================
+// USUÁRIOS DO SISTEMA
+// ============================================
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
-  name      String?
-  role      String   @default("USER") // ADMIN, MANAGER, USER
+  name      String
+  role      String   @default("USER") // ADMIN, USER
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Employee {
-  id          String   @id @default(uuid())
-  name        String
-  position    String
-  department  String
-  email       String?
-  phone       String?
-  hiredAt     DateTime
-  salary      Float
-  status      String   @default("ACTIVE") // ACTIVE, ON_LEAVE, TERMINATED
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+// ============================================
+// PESSOAS (Principal)
+// ============================================
+model Person {
+  id                      Int      @id @default(autoincrement())
+  nome                    String
+  cpf                     String   @unique
+  rg                      String?
+  dataNascimento          String?
+  endereco                String?
+  cargo                   String
+  formacao                String?
+  
+  status                  String   @default("ativo") // ativo, inativo, banco_de_dados, baixa_frequencia
+  
+  // Contato
+  email                   String
+  telefone                String
+  
+  // Empresa e Contrato
+  empresa                 String
+  contrato                String   @default("CONTRATO GLOBAL")
+  contratosAtivos         String[] // Array de contratos
+  dataAdmissao            String?
+  vigenciaInicio          String?
+  vigenciaFim             String?
+  termoConfidencialidade  Boolean  @default(false)
+  
+  // Documentação PJ
+  apresentouCartaoCnpj    Boolean  @default(false)
+  numeroCnpj              String?
+  
+  // Conselho de Classe
+  conselhoClasse          String?
+  anoRegistroConselho     Int?
+  numeroRegistroConselho  String?
+  certidaoQuitacaoPf      Boolean  @default(false)
+  certidaoQuitacaoPj      Boolean  @default(false)
+  
+  // Profissional
+  curriculo               Boolean  @default(false)
+  historicoProfissional   String?
+  treinamentos            String[] // Array de treinamentos
+  
+  // Áreas e Disciplinas
+  areas                   String[] // Array: rodovia, ferrovia, etc.
+  disciplina              String   @default("PROJETO") // PROJETO ou OBRA
+  competencias            String[] // Array de competencias
+  disciplinasProjeto      String[] // Array
+  disciplinasObra         String[] // Array
+  
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+// ============================================
+// CONFIGURAÇÕES (Dropdowns)
+// ============================================
+model Setting {
+  id        Int      @id @default(autoincrement())
+  category  String   // empresas, contratos, disciplinasProjeto, disciplinasObra, areas, treinamentos
+  value     String
+  label     String?  // Para áreas que têm label diferente do value
+  createdAt DateTime @default(now())
+  
+  @@unique([category, value])
 }

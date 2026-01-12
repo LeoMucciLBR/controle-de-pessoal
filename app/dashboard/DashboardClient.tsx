@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from 'react';
-import { Plus, Download, LayoutGrid, List } from 'lucide-react';
+import { Plus, Download, LayoutGrid, List, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FilterPanel } from '@/components/FilterPanel';
 import { PersonTable } from '@/components/PersonTable';
@@ -10,7 +10,7 @@ import { Pagination } from '@/components/Pagination';
 import { PersonDetailModal } from '@/components/PersonDetailModal';
 import { BulkActionsBar } from '@/components/BulkActionsBar';
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog';
-import { mockPeople } from '@/lib/mock-data';
+import { usePeople } from '@/contexts/PeopleContext';
 import { FilterState, Person } from '@/types/person';
 import { PersonFormModal } from '@/components/PersonFormModalNew';
 import { toast } from 'sonner';
@@ -27,6 +27,8 @@ const initialFilters: FilterState = {
 type ViewMode = 'table' | 'grid';
 
 export default function DashboardClient() {
+  const { people, loading, addPerson, updatePerson, deletePerson } = usePeople();
+  
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
@@ -36,10 +38,11 @@ export default function DashboardClient() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Person | number[] | null>(null);
   const [viewMode, setViewMode] = useState<ViewMode>('table');
+  const [saving, setSaving] = useState(false);
 
   // Filter logic
   const filteredPeople = useMemo(() => {
-    return mockPeople.filter((person) => {
+    return people.filter((person) => {
       // Search filter
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
@@ -62,7 +65,8 @@ export default function DashboardClient() {
 
       // Areas filter
       if (filters.areas.length > 0) {
-        const hasMatchingArea = filters.areas.some((area) => person.areas.includes(area));
+        const personAreas = person.areas || [];
+        const hasMatchingArea = filters.areas.some((area) => personAreas.includes(area));
         if (!hasMatchingArea) return false;
       }
 
@@ -78,7 +82,7 @@ export default function DashboardClient() {
 
       return true;
     });
-  }, [filters]);
+  }, [filters, people]);
 
   // Pagination
   const totalPages = Math.ceil(filteredPeople.length / pageSize);
@@ -117,37 +121,62 @@ export default function DashboardClient() {
     setIsFormOpen(true);
   };
 
-  const handleSavePerson = (person: Person) => {
-    // Mock save logic
-    console.log('Saving person:', person);
-    toast.success(editingPerson ? 'Pessoa atualizada com sucesso!' : 'Pessoa cadastrada com sucesso!');
-    setIsFormOpen(false);
+  const handleSavePerson = async (personData: Person) => {
+    try {
+      setSaving(true);
+      if (editingPerson) {
+        await updatePerson(editingPerson.id, personData);
+        toast.success('Pessoa atualizada com sucesso!');
+      } else {
+        await addPerson(personData);
+        toast.success('Pessoa cadastrada com sucesso!');
+      }
+      setIsFormOpen(false);
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao salvar pessoa');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleDelete = (person: Person) => {
     setDeleteTarget(person);
   };
 
-  const handleDuplicate = (person: Person) => {
-    toast.success(`Pessoa duplicada: ${person.nome}`, {
-      description: 'Uma cópia foi criada com sucesso.',
-    });
+  const handleDuplicate = async (person: Person) => {
+    try {
+      const { id, ...personData } = person;
+      await addPerson({ ...personData, nome: `${person.nome} (Cópia)` });
+      toast.success(`Pessoa duplicada: ${person.nome}`, {
+        description: 'Uma cópia foi criada com sucesso.',
+      });
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao duplicar pessoa');
+    }
   };
 
   const handleDeleteSelected = () => {
     setDeleteTarget(selectedIds);
   };
 
-  const handleConfirmDelete = () => {
-    if (Array.isArray(deleteTarget)) {
-      toast.success(`${deleteTarget.length} pessoa(s) excluída(s)`, {
-        description: 'Os registros foram removidos com sucesso.',
-      });
-      setSelectedIds([]);
-    } else if (deleteTarget) {
-      toast.success('Registro excluído', {
-        description: 'O registro foi removido com sucesso.',
-      });
+  const handleConfirmDelete = async () => {
+    try {
+      if (Array.isArray(deleteTarget)) {
+        for (const id of deleteTarget) {
+          await deletePerson(id);
+        }
+        toast.success(`${deleteTarget.length} pessoa(s) excluída(s)`, {
+          description: 'Os registros foram removidos com sucesso.',
+        });
+        setSelectedIds([]);
+      } else if (deleteTarget) {
+        await deletePerson(deleteTarget.id);
+        toast.success('Registro excluído', {
+          description: 'O registro foi removido com sucesso.',
+        });
+      }
+    } catch (error: any) {
+      toast.error(error.message || 'Erro ao excluir');
     }
     setDeleteTarget(null);
   };
@@ -163,6 +192,17 @@ export default function DashboardClient() {
       description: `${filteredPeople.length} registro(s) serão exportados.`,
     });
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-96">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          <p className="text-muted-foreground">Carregando pessoas...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
       <div className="space-y-6">
@@ -212,7 +252,7 @@ export default function DashboardClient() {
           onFilterChange={handleFilterChange}
           onClearFilters={handleClearFilters}
           resultCount={filteredPeople.length}
-          totalCount={mockPeople.length}
+          totalCount={people.length}
         />
 
         {/* Content View */}

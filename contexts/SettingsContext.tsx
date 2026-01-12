@@ -1,13 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { 
-    empresas as initialEmpresas, 
-    contratos as initialContratos, 
-    areasAtuacao as initialAreas,
-    disciplinasProjetoList as initialDisciplinasProjeto,
-    disciplinasObraList as initialDisciplinasObra
-} from '@/lib/mock-data';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 
 // Define the shape of our settings context
 interface SettingsContextType {
@@ -15,18 +8,14 @@ interface SettingsContextType {
     contratos: string[];
     disciplinasProjeto: string[];
     disciplinasObra: string[];
-    // Areas are objects in mock-data, but for simplicity in "generic list" we might want to handle them carefully.
-    // For now, let's keep them as a mapped list of strings or objects. 
-    // The requirement implies adding new "Areas". 
-    // Let's stick to the structure from mock-data but make it mutable.
     areas: { value: string; label: string }[];
-    
-    // New field
     treinamentos: string[];
-
+    loading: boolean;
+    
     // Actions
-    addItem: (category: SettingsCategory, item: string) => void;
-    removeItem: (category: SettingsCategory, item: string) => void;
+    addItem: (category: SettingsCategory, item: string) => Promise<void>;
+    removeItem: (category: SettingsCategory, item: string) => Promise<void>;
+    refreshSettings: () => Promise<void>;
 }
 
 export type SettingsCategory = 
@@ -39,71 +28,130 @@ export type SettingsCategory =
 
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
-const initialTreinamentos = [
-    "NR-10", "NR-35", "BIM Management", "Gestão de Projetos", "Liderança", "Scrum Master"
-];
-
 export function SettingsProvider({ children }: { children: ReactNode }) {
-    // Initialize state with mock data
-    // In a real app, this would come from an API
-    const [empresas, setEmpresas] = useState<string[]>(initialEmpresas);
-    const [contratos, setContratos] = useState<string[]>(initialContratos);
-    const [disciplinasProjeto, setDisciplinasProjeto] = useState<string[]>(initialDisciplinasProjeto);
-    const [disciplinasObra, setDisciplinasObra] = useState<string[]>(initialDisciplinasObra);
-    const [areas, setAreas] = useState<{ value: string; label: string }[]>(initialAreas);
-    const [treinamentos, setTreinamentos] = useState<string[]>(initialTreinamentos);
+    const [empresas, setEmpresas] = useState<string[]>([]);
+    const [contratos, setContratos] = useState<string[]>([]);
+    const [disciplinasProjeto, setDisciplinasProjeto] = useState<string[]>([]);
+    const [disciplinasObra, setDisciplinasObra] = useState<string[]>([]);
+    const [areas, setAreas] = useState<{ value: string; label: string }[]>([]);
+    const [treinamentos, setTreinamentos] = useState<string[]>([]);
+    const [loading, setLoading] = useState(true);
 
-    const addItem = (category: SettingsCategory, item: string) => {
-        switch (category) {
-            case 'empresas':
-                if (!empresas.includes(item)) setEmpresas([...empresas, item]);
-                break;
-            case 'contratos':
-                if (!contratos.includes(item)) setContratos([...contratos, item]);
-                break;
-            case 'disciplinasProjeto':
-                if (!disciplinasProjeto.includes(item)) setDisciplinasProjeto([...disciplinasProjeto, item]);
-                break;
-            case 'disciplinasObra':
-                if (!disciplinasObra.includes(item)) setDisciplinasObra([...disciplinasObra, item]);
-                break;
-            case 'treinamentos':
-                if (!treinamentos.includes(item)) setTreinamentos([...treinamentos, item]);
-                break;
-            case 'areas':
-                // For areas, we need to generate a value from the label
+    const fetchSettings = useCallback(async () => {
+        try {
+            setLoading(true);
+            const response = await fetch('/api/settings');
+            if (!response.ok) throw new Error('Erro ao buscar configurações');
+            
+            const data = await response.json();
+            
+            setEmpresas(data.empresas?.map((e: any) => e.value || e) || []);
+            setContratos(data.contratos?.map((c: any) => c.value || c) || []);
+            setDisciplinasProjeto(data.disciplinasProjeto?.map((d: any) => d.value || d) || []);
+            setDisciplinasObra(data.disciplinasObra?.map((d: any) => d.value || d) || []);
+            setAreas(data.areas || []);
+            setTreinamentos(data.treinamentos?.map((t: any) => t.value || t) || []);
+        } catch (error) {
+            console.error('Erro ao carregar configurações:', error);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        fetchSettings();
+    }, [fetchSettings]);
+
+    const addItem = async (category: SettingsCategory, item: string) => {
+        try {
+            const body: any = { category, value: item };
+            
+            // Para áreas, geramos o value a partir do label
+            if (category === 'areas') {
                 const value = item.toLowerCase().replace(/\s+/g, '_').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-                if (!areas.some(a => a.value === value)) {
-                    setAreas([...areas, { value, label: item }]);
-                }
-                break;
+                body.value = value;
+                body.label = item;
+            }
+
+            const response = await fetch('/api/settings', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body),
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.error || 'Erro ao adicionar item');
+            }
+
+            // Atualizar estado local
+            switch (category) {
+                case 'empresas':
+                    setEmpresas(prev => [...prev, item]);
+                    break;
+                case 'contratos':
+                    setContratos(prev => [...prev, item]);
+                    break;
+                case 'disciplinasProjeto':
+                    setDisciplinasProjeto(prev => [...prev, item]);
+                    break;
+                case 'disciplinasObra':
+                    setDisciplinasObra(prev => [...prev, item]);
+                    break;
+                case 'treinamentos':
+                    setTreinamentos(prev => [...prev, item]);
+                    break;
+                case 'areas':
+                    const value = item.toLowerCase().replace(/\s+/g, '_').normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+                    setAreas(prev => [...prev, { value, label: item }]);
+                    break;
+            }
+        } catch (error) {
+            console.error('Erro ao adicionar item:', error);
+            throw error;
         }
     };
 
-    const removeItem = (category: SettingsCategory, item: string) => {
-        switch (category) {
-            case 'empresas':
-                setEmpresas(prev => prev.filter(i => i !== item));
-                break;
-            case 'contratos':
-                setContratos(prev => prev.filter(i => i !== item));
-                break;
-            case 'disciplinasProjeto':
-                setDisciplinasProjeto(prev => prev.filter(i => i !== item));
-                break;
-            case 'disciplinasObra':
-                setDisciplinasObra(prev => prev.filter(i => i !== item));
-                break;
-            case 'treinamentos':
-                setTreinamentos(prev => prev.filter(i => i !== item));
-                break;
-            case 'areas':
-                // For areas, item is the value or label? Let's assume passed item is the value for deletion for safety, 
-                // OR we handle deletion by finding the match. Let's assume we pass the *Label* or *Value*.
-                // For "Generic List", users usually delete by seeing the Label.
-                // Let's filter by label match for simplicity in this MVP context
-                setAreas(prev => prev.filter(a => a.label !== item));
-                break;
+    const removeItem = async (category: SettingsCategory, item: string) => {
+        try {
+            let valueToDelete = item;
+            
+            // Para áreas, precisamos encontrar o value correto
+            if (category === 'areas') {
+                const area = areas.find(a => a.label === item || a.value === item);
+                valueToDelete = area?.value || item;
+            }
+
+            const response = await fetch(`/api/settings?category=${category}&value=${encodeURIComponent(valueToDelete)}`, {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) throw new Error('Erro ao remover item');
+
+            // Atualizar estado local
+            switch (category) {
+                case 'empresas':
+                    setEmpresas(prev => prev.filter(i => i !== item));
+                    break;
+                case 'contratos':
+                    setContratos(prev => prev.filter(i => i !== item));
+                    break;
+                case 'disciplinasProjeto':
+                    setDisciplinasProjeto(prev => prev.filter(i => i !== item));
+                    break;
+                case 'disciplinasObra':
+                    setDisciplinasObra(prev => prev.filter(i => i !== item));
+                    break;
+                case 'treinamentos':
+                    setTreinamentos(prev => prev.filter(i => i !== item));
+                    break;
+                case 'areas':
+                    setAreas(prev => prev.filter(a => a.label !== item && a.value !== item));
+                    break;
+            }
+        } catch (error) {
+            console.error('Erro ao remover item:', error);
+            throw error;
         }
     };
 
@@ -115,8 +163,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             disciplinasObra,
             areas,
             treinamentos,
+            loading,
             addItem,
-            removeItem
+            removeItem,
+            refreshSettings: fetchSettings
         }}>
             {children}
         </SettingsContext.Provider>
