@@ -19,16 +19,7 @@ function PageHeader() {
         return 'Controle de Pessoal';
     };
 
-    return (
-        <div className="mb-6 flex flex-col gap-1">
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                {getPageTitle(pathname)}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-                Gerencie as informações do seu sistema.
-            </p>
-        </div>
-    );
+
 }
 
 export function AppLayout({ children }: AppLayoutProps) {

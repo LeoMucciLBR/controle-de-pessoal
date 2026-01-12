@@ -164,12 +164,13 @@ export function PersonTable({
             <TableRow
               key={person.id}
               className={cn(
-                'transition-colors animate-fade-in',
+                'transition-colors animate-fade-in cursor-pointer hover:bg-muted/50',
                 selectedIds.includes(person.id) && 'bg-primary/5'
               )}
               style={{ animationDelay: `${index * 30}ms` }}
+              onClick={() => onView(person)}
             >
-              <TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
                 <Checkbox
                   checked={selectedIds.includes(person.id)}
                   onCheckedChange={() => toggleOne(person.id)}
@@ -200,7 +201,7 @@ export function PersonTable({
               <TableCell className="text-sm">{person.empresa}</TableCell>
               <TableCell className="text-sm">{person.contrato}</TableCell>
               <TableCell>
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1" onClick={(e) => e.stopPropagation()}>
                   <a
                     href={`mailto:${person.email}`}
                     className="flex items-center gap-1 text-xs text-muted-foreground hover:text-primary transition-colors"
@@ -217,10 +218,10 @@ export function PersonTable({
                   </a>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell onClick={(e) => e.stopPropagation()}>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-muted">
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>

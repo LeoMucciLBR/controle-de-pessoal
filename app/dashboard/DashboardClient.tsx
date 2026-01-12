@@ -1,18 +1,19 @@
 "use client"
 
 import { useState, useMemo } from 'react';
-import { Plus, Download } from 'lucide-react';
+import { Plus, Download, LayoutGrid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FilterPanel } from '@/components/FilterPanel';
 import { PersonTable } from '@/components/PersonTable';
+import { PersonCardGrid } from '@/components/PersonCardGrid';
 import { Pagination } from '@/components/Pagination';
 import { PersonDetailModal } from '@/components/PersonDetailModal';
 import { BulkActionsBar } from '@/components/BulkActionsBar';
 import { DeleteConfirmDialog } from '@/components/DeleteConfirmDialog';
 import { mockPeople } from '@/lib/mock-data';
 import { FilterState, Person } from '@/types/person';
+import { PersonFormModal } from '@/components/PersonFormModal';
 import { toast } from 'sonner';
-// import { AppLayout } from '@/components/layout/AppLayout'; // We use our own layout
 
 const initialFilters: FilterState = {
   search: '',
@@ -23,13 +24,18 @@ const initialFilters: FilterState = {
   disciplina: 'all',
 };
 
+type ViewMode = 'table' | 'grid';
+
 export default function DashboardClient() {
   const [filters, setFilters] = useState<FilterState>(initialFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [viewPerson, setViewPerson] = useState<Person | null>(null);
+  const [editingPerson, setEditingPerson] = useState<Person | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Person | number[] | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('table');
 
   // Filter logic
   const filteredPeople = useMemo(() => {
@@ -101,10 +107,21 @@ export default function DashboardClient() {
     setViewPerson(person);
   };
 
+  const handleAdd = () => {
+    setEditingPerson(null);
+    setIsFormOpen(true);
+  };
+
   const handleEdit = (person: Person) => {
-    toast.info(`Editar: ${person.nome}`, {
-      description: 'Funcionalidade de edição em desenvolvimento.',
-    });
+    setEditingPerson(person);
+    setIsFormOpen(true);
+  };
+
+  const handleSavePerson = (person: Person) => {
+    // Mock save logic
+    console.log('Saving person:', person);
+    toast.success(editingPerson ? 'Pessoa atualizada com sucesso!' : 'Pessoa cadastrada com sucesso!');
+    setIsFormOpen(false);
   };
 
   const handleDelete = (person: Person) => {
@@ -158,11 +175,31 @@ export default function DashboardClient() {
             </p>
           </div>
           <div className="flex items-center gap-3">
+             <div className="flex bg-muted/50 p-1 rounded-md border border-border mr-2">
+                <Button 
+                   variant={viewMode === 'table' ? 'secondary' : 'ghost'} 
+                   size="icon" 
+                   className="h-8 w-8" 
+                   onClick={() => setViewMode('table')}
+                   title="Visualização em Lista"
+                >
+                   <List className="h-4 w-4" />
+                </Button>
+                <Button 
+                   variant={viewMode === 'grid' ? 'secondary' : 'ghost'} 
+                   size="icon" 
+                   className="h-8 w-8" 
+                   onClick={() => setViewMode('grid')}
+                   title="Visualização em Cards"
+                >
+                   <LayoutGrid className="h-4 w-4" />
+                </Button>
+             </div>
             <Button variant="outline" onClick={handleExportAll}>
               <Download className="mr-2 h-4 w-4" />
               Exportar
             </Button>
-            <Button>
+            <Button onClick={handleAdd}>
               <Plus className="mr-2 h-4 w-4" />
               Adicionar Pessoa
             </Button>
@@ -178,16 +215,28 @@ export default function DashboardClient() {
           totalCount={mockPeople.length}
         />
 
-        {/* Table */}
-        <PersonTable
-          people={paginatedPeople}
-          selectedIds={selectedIds}
-          onSelectionChange={setSelectedIds}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-          onDuplicate={handleDuplicate}
-        />
+        {/* Content View */}
+        {viewMode === 'table' ? (
+           <PersonTable
+             people={paginatedPeople}
+             selectedIds={selectedIds}
+             onSelectionChange={setSelectedIds}
+             onView={handleView}
+             onEdit={handleEdit}
+             onDelete={handleDelete}
+             onDuplicate={handleDuplicate}
+           />
+        ) : (
+           <PersonCardGrid 
+             people={paginatedPeople}
+             selectedIds={selectedIds}
+             onSelectionChange={setSelectedIds}
+             onView={handleView}
+             onEdit={handleEdit}
+             onDelete={handleDelete}
+             onDuplicate={handleDuplicate}
+           />
+        )}
 
         {/* Pagination */}
         {filteredPeople.length > 0 && (
@@ -207,6 +256,14 @@ export default function DashboardClient() {
           onClearSelection={() => setSelectedIds([])}
           onDeleteSelected={handleDeleteSelected}
           onExportSelected={handleExportSelected}
+        />
+
+        {/* Form Modal */}
+        <PersonFormModal
+            open={isFormOpen}
+            onOpenChange={setIsFormOpen}
+            person={editingPerson}
+            onSave={handleSavePerson}
         />
 
         {/* Detail Modal */}

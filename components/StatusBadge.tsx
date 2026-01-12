@@ -31,10 +31,11 @@ export function StatusBadge({ status, className }: StatusBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium transition-colors',
+        'inline-flex items-center justify-center rounded-full border px-3 py-1 text-xs font-medium transition-colors whitespace-nowrap min-w-max',
         config.className,
         className
       )}
+      style={{ whiteSpace: 'nowrap' }}
     >
       {config.label}
     </span>
