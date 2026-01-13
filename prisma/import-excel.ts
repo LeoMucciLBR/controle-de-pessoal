@@ -183,13 +183,29 @@ async function main() {
           areasDetalhes[a] = activityTypes;
       });
 
+// Helper slugify
+function slugify(text: string) {
+  return text.toString().toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove accents
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w\-]+/g, '')       // Remove all non-word chars
+    .replace(/\-\-+/g, '-')         // Replace multiple - with single -
+    .replace(/^-+/, '')             // Trim - from start
+    .replace(/-+$/, '');            // Trim - from end
+}
+
+// ... inside main loop ...
+
       // Data Cleaning
       let cpf = getVal(row, IDX.CPF).replace(/\D/g, '');
-      if (!cpf || cpf.length < 5) { // Too small CPF?
-          cpf = `MISSING-${Date.now()}-${count}`;
+      const isMissingCpf = !cpf || cpf.length < 5;
+      
+      if (isMissingCpf) {
+          // Deterministic CPF
+          cpf = `MISSING-${slugify(nome)}`;
       }
 
-      const email = getVal(row, IDX.EMAIL) || `sem_email_${Date.now()}_${count}@lb.com`;
+      const email = getVal(row, IDX.EMAIL) || `sem_email_${slugify(nome)}@lb.com`;
       const cargo = getVal(row, IDX.CARGO) || 'Não Informado';
       const empresa = getVal(row, IDX.EMPRESA) || 'Não Informada';
       const telefone = getVal(row, IDX.TELEFONE) || '-';
@@ -217,7 +233,7 @@ async function main() {
           empresa: empresa,
           contrato: getVal(row, IDX.CONTRATO_GLOBAL) || 'Sem Contrato',
           
-          vigenciaInicio: dataAdmissao, // Copy Admissao to Vigencia Inicio
+          vigenciaInicio: dataAdmissao,
           vigenciaFim: vigenciaFim,
           vigenciaStatus: getVal(row, IDX.VIGENCIA_STATUS) || null,
           
@@ -252,12 +268,16 @@ async function main() {
           atuacaoObra: discObra.length > 0,
           disciplina: 'PROJETO'
       };
-
+      
       try {
-          let existing = null;
-          // Check CPF length to avoid searching for "MISSING-..."
-          if (cpf.length === 11) {
-             existing = await prisma.person.findUnique({ where: { cpf } });
+          let existing = await prisma.person.findUnique({ where: { cpf } });
+          
+          if (!existing && isMissingCpf) {
+               // Fallback: Find by Name
+               existing = await prisma.person.findFirst({ where: { nome: nome } });
+               if (existing) {
+                   console.log(`  > Refound by Name: ${nome} (Updating CPF to ${cpf})`);
+               }
           }
 
           // ...

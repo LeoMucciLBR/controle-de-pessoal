@@ -100,13 +100,13 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
 
   const getItems = (category: SettingsCategory): string[] => {
     switch (category) {
-      case 'empresas': return empresas;
-      case 'contratos': return contratos;
-      case 'clientes': return clientes;
-      case 'disciplinasProjeto': return disciplinasProjeto;
-      case 'disciplinasObra': return disciplinasObra;
-      case 'areas': return areas.map(a => a.label);
-      case 'treinamentos': return treinamentos;
+      case 'empresas': return empresas || [];
+      case 'contratos': return contratos || [];
+      case 'clientes': return clientes || [];
+      case 'disciplinasProjeto': return disciplinasProjeto || [];
+      case 'disciplinasObra': return disciplinasObra || [];
+      case 'areas': return (areas || []).map(a => a.label);
+      case 'treinamentos': return treinamentos || [];
       default: return [];
     }
   };

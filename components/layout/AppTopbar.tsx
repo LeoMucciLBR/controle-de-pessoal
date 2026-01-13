@@ -10,7 +10,8 @@ import {
   Menu,
   X,
   LogOut,
-  Settings
+  Settings,
+  PieChart
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -28,6 +29,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
   { to: '/dashboard', icon: Users, label: 'Pessoas' },
+  { to: '/graficos', icon: PieChart, label: 'Indicadores' },
   { to: '/ordens-servico', icon: FileText, label: 'Ordens de Serviço' },
   { to: '/empresas', icon: Building2, label: 'Empresas' },
 ];
