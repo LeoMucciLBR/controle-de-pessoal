@@ -51,6 +51,7 @@ model Person {
   dataAdmissao            String?
   vigenciaInicio          String?
   vigenciaFim             String?
+  vigenciaStatus          String?
   termoConfidencialidade  Boolean  @default(false)
   
   // Documentação PJ

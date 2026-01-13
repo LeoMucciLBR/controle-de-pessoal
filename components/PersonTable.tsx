@@ -229,13 +229,23 @@ export function PersonTable({
               </TableCell>
               <TableCell>
                 {(() => {
+                  // Check DB Status first
+                  const dbStatus = person.vigenciaStatus?.toLowerCase();
+                  if (dbStatus === 'vencido') {
+                      return (
+                        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border w-fit text-red-400 bg-red-400/10 border-red-400/20">
+                          <AlertCircle className="w-3 h-3" />
+                          <span className="text-xs font-medium">Vencido</span>
+                        </div>
+                      );
+                  }
+
                   if (!person.vigenciaFim) return <span className="text-muted-foreground">-</span>;
-                  
+
                   const today = new Date();
                   today.setHours(0,0,0,0);
                   
-                  // Parse vigenciaFim (YYYY-MM-DD)
-                  // Handle potential DD/MM/YYYY format if legacy data exists, though standard is YYYY-MM-DD
+                  // Parse vigenciaFim (YYYY-MM-DDString)
                   let year, month, day;
                   if (person.vigenciaFim.includes('/')) {
                      [day, month, year] = person.vigenciaFim.split('/').map(Number);
@@ -257,6 +267,10 @@ export function PersonTable({
                     status = 'A Vencer';
                     colorClass = 'text-orange-400 bg-orange-400/10 border-orange-400/20';
                     Icon = Clock;
+                  } else if (dbStatus && dbStatus !== 'vigente' && dbStatus !== 'n/a' && dbStatus !== 'indeterminado') {
+                      status = person.vigenciaStatus!;
+                      colorClass = 'text-gray-400 bg-gray-400/10 border-gray-400/20';
+                      Icon = AlertCircle;
                   }
                   
                   return (

@@ -587,7 +587,7 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                         </div>
                                       </motion.div>
                                       
-                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-4">
+                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-3">
                                           <ModernInput 
                                             label="Data de Admissão" 
                                             type="date" 
@@ -596,7 +596,7 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                             icon={Calendar}
                                           />
                                       </motion.div>
-                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-4">
+                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-3">
                                           <ModernInput 
                                             label="Vigência Início" 
                                             type="date" 
@@ -605,13 +605,22 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                             icon={Calendar}
                                           />
                                       </motion.div>
-                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-4">
+                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-3">
                                           <ModernInput 
                                             label="Vigência Fim" 
                                             type="date" 
                                             value={formData.vigenciaFim || ''} 
                                             onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('vigenciaFim', e.target.value)} 
                                             icon={Calendar}
+                                          />
+                                      </motion.div>
+                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-3">
+                                          <ModernSelect 
+                                            label="Status da Vigência" 
+                                            value={formData.vigenciaStatus || ''} 
+                                            onChange={(v) => handleChange('vigenciaStatus', v)} 
+                                            options={['Vigente', 'Vencido', 'Indeterminado', 'N/A']}
+                                            icon={Shield}
                                           />
                                       </motion.div>
 

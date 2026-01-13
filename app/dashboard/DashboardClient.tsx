@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { Plus, Download, LayoutGrid, List, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { FilterPanel } from '@/components/FilterPanel';
+import { DashboardStats } from '@/components/DashboardStats';
 import { PersonTable } from '@/components/PersonTable';
 import { PersonCardGrid } from '@/components/PersonCardGrid';
 import { Pagination } from '@/components/Pagination';
@@ -40,6 +41,21 @@ export default function DashboardClient() {
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [saving, setSaving] = useState(false);
 
+  // Compute unique options from data
+  const uniqueCompanies = useMemo(() => {
+    const companies = new Set(people.map(p => p.empresa).filter(Boolean));
+    return Array.from(companies).sort();
+  }, [people]);
+
+  const uniqueContracts = useMemo(() => {
+    const contracts = new Set<string>();
+    people.forEach(p => {
+      if (p.contrato) contracts.add(p.contrato);
+      p.contratosDetalhados?.forEach(c => contracts.add(c.nome));
+    });
+    return Array.from(contracts).filter(c => c && c !== 'Sem Contrato').sort();
+  }, [people]);
+
   // Filter logic
   const filteredPeople = useMemo(() => {
     return people.filter((person) => {
@@ -54,35 +70,98 @@ export default function DashboardClient() {
       }
 
       // Status filter
-      if (filters.status !== 'all' && person.status !== filters.status) {
-        return false;
+      if (filters.status !== 'all') {
+         const pStatus = person.status?.toLowerCase() || '';
+         const fStatus = filters.status.toLowerCase();
+         if (pStatus !== fStatus) return false;
       }
 
       // Empresa filter
-      if (filters.empresa && person.empresa !== filters.empresa) {
-        return false;
+      if (filters.empresa) {
+         const pEmpresa = person.empresa?.toLowerCase() || '';
+         const fEmpresa = filters.empresa.toLowerCase();
+         if (pEmpresa !== fEmpresa) return false;
       }
 
       // Areas filter
       if (filters.areas.length > 0) {
         const personAreas = person.areas || [];
-        const hasMatchingArea = filters.areas.some((area) => personAreas.includes(area));
+        // Case insensitive check: does person have ANY of the filtered areas?
+        const hasMatchingArea = filters.areas.some(filterArea => 
+            personAreas.some(personArea => personArea.toLowerCase() === filterArea.toLowerCase())
+        );
         if (!hasMatchingArea) return false;
       }
 
       // Contrato filter
-      if (filters.contrato !== 'all' && person.contrato !== filters.contrato) {
-        return false;
+      if (filters.contrato !== 'all') {
+          const fContrato = filters.contrato.toLowerCase();
+          const pContrato = person.contrato?.toLowerCase();
+          const pDetalhados = person.contratosDetalhados?.map(c => c.nome.toLowerCase()) || [];
+          
+          const matches = pContrato === fContrato || pDetalhados.includes(fContrato);
+          if (!matches) return false;
       }
 
       // Disciplina filter
-      if (filters.disciplina !== 'all' && person.disciplina !== filters.disciplina) {
-        return false;
+      if (filters.disciplina !== 'all') {
+          const pDisciplina = person.disciplina?.toLowerCase();
+          const fDisciplina = filters.disciplina.toLowerCase();
+          if (pDisciplina !== fDisciplina) return false;
+      }
+
+      // Alert filter
+      if (filters.alert) {
+          const now = new Date();
+          const thirtyDaysFromNow = new Date();
+          thirtyDaysFromNow.setDate(now.getDate() + 30);
+          
+          if (filters.alert === 'expired') {
+              const isExpired = person.vigenciaStatus?.toLowerCase() === 'vencido' || 
+                  (person.vigenciaFim && new Date(person.vigenciaFim) < now && person.vigenciaStatus?.toLowerCase() !== 'vigente');
+              if (!isExpired) return false;
+          } else if (filters.alert === 'expiring') {
+             if (!person.vigenciaFim) return false;
+             const d = new Date(person.vigenciaFim);
+             const isExpiring = d >= now && d <= thirtyDaysFromNow;
+             if (!isExpiring) return false;
+          }
       }
 
       return true;
     });
   }, [filters, people]);
+
+  const handleStatClick = (type: 'active' | 'contract' | 'expired' | 'expiring', value?: string) => {
+      const newFilters = { ...filters }; // Use current or initial? User wants "drill down" or "reset"?
+      // "volte a informacao relevante" implies SHOW ONLY THAT.
+      // So I should Reset others.
+      // Need initialFilters.
+      // I'll assume standard initial values.
+      const resetFilters = {
+          search: '',
+          status: 'all',
+          empresa: '',
+          areas: [],
+          contrato: 'all',
+          disciplina: 'all',
+          alert: undefined
+      } as any; // Cast to avoid strict typing issues if initialFilters is not imported
+
+      const nextFilters = { ...resetFilters };
+
+      if (type === 'active') {
+          nextFilters.status = 'ativo';
+      } else if (type === 'contract' && value) {
+         nextFilters.contrato = value;
+      } else if (type === 'expired') {
+          nextFilters.alert = 'expired';
+      } else if (type === 'expiring') {
+          nextFilters.alert = 'expiring';
+      }
+      setFilters(nextFilters);
+      setCurrentPage(1);
+  };
 
   // Pagination
   const totalPages = Math.ceil(filteredPeople.length / pageSize);
@@ -246,6 +325,9 @@ export default function DashboardClient() {
           </div>
         </div>
 
+        {/* Stats */}
+        <DashboardStats people={people} onStatClick={handleStatClick} />
+
         {/* Filters */}
         <FilterPanel
           filters={filters}
@@ -253,6 +335,8 @@ export default function DashboardClient() {
           onClearFilters={handleClearFilters}
           resultCount={filteredPeople.length}
           totalCount={people.length}
+          companies={uniqueCompanies}
+          contracts={uniqueContracts}
         />
 
         {/* Content View */}

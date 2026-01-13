@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { FilterState, PersonStatus, AreaAtuacao, Contrato, Disciplina } from '@/types/person';
-import { empresas, contratos, areasAtuacao } from '@/lib/mock-data';
+import { areasAtuacao } from '@/lib/mock-data';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 
@@ -19,6 +19,8 @@ interface FilterPanelProps {
   onClearFilters: () => void;
   resultCount: number;
   totalCount: number;
+  companies: string[];
+  contracts: string[];
 }
 
 export function FilterPanel({
@@ -27,6 +29,8 @@ export function FilterPanel({
   onClearFilters,
   resultCount,
   totalCount,
+  companies,
+  contracts,
 }: FilterPanelProps) {
   const hasActiveFilters =
     filters.search ||
@@ -87,7 +91,7 @@ export function FilterPanel({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as Empresas</SelectItem>
-            {empresas.map((empresa) => (
+            {companies.map((empresa) => (
               <SelectItem key={empresa} value={empresa}>
                 {empresa}
               </SelectItem>
@@ -106,7 +110,7 @@ export function FilterPanel({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os Contratos</SelectItem>
-            {contratos.map((contrato) => (
+            {contracts.map((contrato) => (
               <SelectItem key={contrato} value={contrato}>
                 {contrato}
               </SelectItem>

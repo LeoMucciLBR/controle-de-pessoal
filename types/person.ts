@@ -36,6 +36,7 @@ export interface Person {
   dataAdmissao?: string;
   vigenciaInicio?: string;
   vigenciaFim?: string;
+  vigenciaStatus?: string;
   termoConfidencialidade?: boolean;
 
   // Documentação PJ
@@ -77,4 +78,5 @@ export interface FilterState {
   areas: AreaAtuacao[];
   contrato: Contrato | 'all';
   disciplina: Disciplina | 'all';
+  alert?: 'expired' | 'expiring';
 }
