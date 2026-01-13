@@ -20,13 +20,18 @@ const statusConfig: Record<PersonStatus, { label: string; className: string }> =
   }
 };
 
+const defaultConfig = {
+  label: 'Desconhecido',
+  className: 'bg-gray-500 text-white border-gray-500'
+};
+
 interface StatusBadgeProps {
-  status: PersonStatus;
+  status?: PersonStatus | null;
   className?: string;
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
-  const config = statusConfig[status];
+  const config = status && statusConfig[status] ? statusConfig[status] : defaultConfig;
 
   return (
     <span

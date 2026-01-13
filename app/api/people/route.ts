@@ -9,9 +9,13 @@ export async function GET() {
     });
 
     return NextResponse.json(people);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao buscar pessoas:', error);
-    return NextResponse.json({ error: 'Erro ao buscar pessoas' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Erro ao buscar pessoas',
+      details: error?.message || 'Unknown error',
+      code: error?.code || 'UNKNOWN'
+    }, { status: 500 });
   }
 }
 

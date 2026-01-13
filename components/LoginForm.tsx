@@ -107,20 +107,20 @@ const LoginForm = () => {
           <motion.div
             className="space-y-2"
             variants={inputVariants}
-            animate={focusedField === 'email' ? 'focused' : 'unfocused'}
+            animate={focusedField === 'username' ? 'focused' : 'unfocused'}
           >
-            <Label htmlFor="email" className="text-foreground font-medium">
+            <Label htmlFor="username" className="text-foreground font-medium">
               Usuário
             </Label>
-            <div className={`relative input-glow rounded-lg transition-all duration-300 ${focusedField === 'email' ? 'ring-2 ring-primary/20' : ''}`}>
+            <div className={`relative input-glow rounded-lg transition-all duration-300 ${focusedField === 'username' ? 'ring-2 ring-primary/20' : ''}`}>
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
-                id="email"
+                id="username"
                 type="text"
                 placeholder="seu.usuario"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                onFocus={() => setFocusedField('email')}
+                onFocus={() => setFocusedField('username')}
                 onBlur={() => setFocusedField(null)}
                 className="pl-10 h-12 bg-background border-border focus:border-primary transition-all duration-300"
                 disabled={isLoading}
