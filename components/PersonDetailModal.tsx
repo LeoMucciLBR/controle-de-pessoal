@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Person, AreaAtuacao } from '@/types/person';
 import { StatusBadge } from './StatusBadge';
-import { Mail, Phone, Building2, FileText, Calendar, Briefcase, UserCircle, Check, X } from 'lucide-react';
+import { Mail, Phone, Building2, FileText, Calendar, Briefcase, UserCircle, Check, X, AlertCircle, Clock, CheckCircle2, Tag, Brain } from 'lucide-react';
 import { areasAtuacao } from '@/lib/mock-data';
 import { useSettings } from '@/contexts/SettingsContext';
 import { ContractColumn } from './ContractColumn';
@@ -110,11 +110,23 @@ export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailMo
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                <InfoItem label="Empresa" value={person.empresa} />
+               <InfoItem label="Contrato Global" value={person.contrato} />
                <InfoItem label="Admissão" value={person.dataAdmissao ? new Date(person.dataAdmissao).toLocaleDateString('pt-BR') : '-'} />
                <InfoItem label="Cargo" value={person.cargo} />
                
                <InfoItem label="Vigência Início" value={person.vigenciaInicio ? new Date(person.vigenciaInicio).toLocaleDateString('pt-BR') : '-'} />
                <InfoItem label="Vigência Fim" value={person.vigenciaFim ? new Date(person.vigenciaFim).toLocaleDateString('pt-BR') : '-'} />
+               
+               <div className="flex flex-col gap-0.5">
+                  <span className="text-xs text-muted-foreground">Status Vigência</span>
+                  {(() => {
+                        const dbStatus = person.vigenciaStatus?.toLowerCase();
+                        if (dbStatus === 'vencido') {
+                             return <Badge variant="destructive" className="w-fit flex gap-1 items-center px-2 py-0.5 text-xs"><AlertCircle className="w-3 h-3" /> Vencido</Badge>;
+                        }
+                        return <Badge variant="outline" className="w-fit border-emerald-500/30 text-emerald-500 bg-emerald-500/5 flex gap-1 items-center px-2 py-0.5 text-xs"><CheckCircle2 className="w-3 h-3" /> {person.vigenciaStatus || 'Vigente'}</Badge>;
+                  })()}
+               </div>
                
                <div className="col-span-full mt-2">
                   <Separator className="mb-4" />
@@ -214,11 +226,27 @@ export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailMo
                         {person.historicoProfissional || "Sem histórico registrado."}
                     </p>
                 </div>
-                <div>
-                     <h3 className="text-sm font-semibold mb-3">Treinamentos</h3>
-                     <ul className="list-disc list-inside text-sm text-muted-foreground bg-muted/30 p-3 rounded-md border min-h-[80px]">
-                        {person.treinamentos?.map(t => <li key={t}>{t}</li>) || <li>Nenhum treinamento registrado.</li>}
-                     </ul>
+                <div className="space-y-6">
+                    <div>
+                         <h3 className="text-sm font-semibold mb-3 flex items-center gap-2"><Brain className="w-4 h-4 text-primary" /> Competências</h3>
+                         <div className="flex flex-wrap gap-2 bg-muted/30 p-3 rounded-md border min-h-[80px] content-start">
+                            {person.competencias && person.competencias.length > 0 ? (
+                                person.competencias.map(c => (
+                                    <Badge key={c} variant="secondary" className="bg-white/10 hover:bg-white/20">
+                                        <Tag className="w-3 h-3 mr-1 opacity-50" /> {c}
+                                    </Badge>
+                                ))
+                            ) : (
+                                <span className="text-sm text-muted-foreground">Nenhuma competência registrada.</span>
+                            )}
+                         </div>
+                    </div>
+                    <div>
+                         <h3 className="text-sm font-semibold mb-3">Treinamentos</h3>
+                         <ul className="list-disc list-inside text-sm text-muted-foreground bg-muted/30 p-3 rounded-md border min-h-[80px]">
+                            {person.treinamentos?.map(t => <li key={t}>{t}</li>) || <li>Nenhum treinamento registrado.</li>}
+                         </ul>
+                    </div>
                 </div>
              </div>
           </section>
