@@ -57,7 +57,7 @@ model Person {
   
   // Conselho de Classe
   conselhoClasse          String?
-  anoRegistroConselho     Int?
+  anoRegistroConselho     String?
   numeroRegistroConselho  String?
   certidaoQuitacaoPf      Boolean  @default(false)
   certidaoQuitacaoPj      Boolean  @default(false)

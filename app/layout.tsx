@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SettingsProvider } from "@/contexts/SettingsContext";
 import { PeopleProvider } from "@/contexts/PeopleContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,14 +27,16 @@ export default function RootLayout({
           defaultTheme="system"
           enableSystem
         >
-          <SettingsProvider>
-            <PeopleProvider>
-              <div className="fixed top-4 right-4 z-50">
-                <ThemeToggle />
-              </div>
-              {children}
-            </PeopleProvider>
-          </SettingsProvider>
+          <AuthProvider>
+            <SettingsProvider>
+              <PeopleProvider>
+                <div className="fixed top-4 right-4 z-50">
+                  <ThemeToggle />
+                </div>
+                {children}
+              </PeopleProvider>
+            </SettingsProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

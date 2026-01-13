@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Users,
@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { SettingsModal } from '@/components/SettingsModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 const navItems = [
   { to: '/dashboard', icon: Users, label: 'Pessoas' },
@@ -34,8 +35,23 @@ const navItems = [
 
 export function AppTopbar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
+
+  const userInitials = user?.name
+    ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    : 'US';
+
+  const avatarUrl = user?.name
+    ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2f4982&color=fff`
+    : 'https://ui-avatars.com/api/?name=User&background=2f4982&color=fff';
 
   return (
     <>
@@ -104,19 +120,19 @@ export function AppTopbar() {
                   <DropdownMenuTrigger asChild>
                      <Button variant="ghost" className="relative h-10 w-10 rounded-full border border-border hover:bg-muted">
                        <Avatar className="h-9 w-9">
-                          <AvatarImage src="https://ui-avatars.com/api/?name=Admin+User&background=2f4982&color=fff" />
-                          <AvatarFallback>AD</AvatarFallback>
+                          <AvatarImage src={avatarUrl} />
+                          <AvatarFallback>{userInitials}</AvatarFallback>
                        </Avatar>
                      </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-56" forceMount>
                      <div className="flex items-center justify-start gap-2 p-2">
                         <div className="flex flex-col space-y-1 leading-none">
-                           <p className="font-medium">Admin User</p>
-                           <p className="w-[200px] truncate text-sm text-muted-foreground">admin@lbr.com</p>
+                           <p className="font-medium">{user?.name || 'Usuário'}</p>
+                           <p className="w-[200px] truncate text-sm text-muted-foreground">{user?.email || ''}</p>
                         </div>
                      </div>
-                     <DropdownMenuItem className="text-destructive focus:text-destructive cursor-pointer">
+                     <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive cursor-pointer">
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Sair</span>
                      </DropdownMenuItem>
@@ -183,15 +199,15 @@ export function AppTopbar() {
                 <div className="border-t border-border my-2 pt-2">
                    <div className="flex items-center gap-3 px-3 py-3 rounded-md">
                       <Avatar className="h-8 w-8">
-                          <AvatarImage src="https://ui-avatars.com/api/?name=Admin+User&background=2f4982&color=fff" />
-                          <AvatarFallback>AD</AvatarFallback>
+                          <AvatarImage src={avatarUrl} />
+                          <AvatarFallback>{userInitials}</AvatarFallback>
                        </Avatar>
                        <div>
-                          <p className="text-sm font-medium">Admin User</p>
-                          <p className="text-xs text-muted-foreground">admin@lbr.com</p>
+                          <p className="text-sm font-medium">{user?.name || 'Usuário'}</p>
+                          <p className="text-xs text-muted-foreground">{user?.email || ''}</p>
                        </div>
                    </div>
-                   <Button variant="ghost" className="w-full justify-start text-destructive hover:text-destructive hover:bg-muted">
+                   <Button onClick={handleLogout} variant="ghost" className="w-full justify-start text-destructive hover:text-destructive hover:bg-muted">
                       <LogOut className="mr-2 h-4 w-4" />
                       Sair
                    </Button>

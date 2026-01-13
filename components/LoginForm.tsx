@@ -2,28 +2,37 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, User, Lock, ArrowRight, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, User, Lock, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/AuthContext';
 
 const LoginForm = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const router = useRouter();
+  const { login } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate login
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    router.push('/dashboard');
+    setError(null);
+    
+    const result = await login(email, password);
+    
+    if (result.success) {
+      router.push('/dashboard');
+    } else {
+      setError(result.error || 'Erro ao fazer login');
+      setIsLoading(false);
+    }
   };
 
   const inputVariants = {
@@ -80,28 +89,41 @@ const LoginForm = () => {
           </p>
         </motion.div>
 
+        {/* Error Message */}
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/20 flex items-center gap-2 text-red-500"
+          >
+            <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            <span className="text-sm">{error}</span>
+          </motion.div>
+        )}
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Username Field */}
+          {/* Email Field */}
           <motion.div
             className="space-y-2"
             variants={inputVariants}
-            animate={focusedField === 'username' ? 'focused' : 'unfocused'}
+            animate={focusedField === 'email' ? 'focused' : 'unfocused'}
           >
-            <Label htmlFor="username" className="text-foreground font-medium">
+            <Label htmlFor="email" className="text-foreground font-medium">
               Usuário
             </Label>
-            <div className={`relative input-glow rounded-lg transition-all duration-300 ${focusedField === 'username' ? 'ring-2 ring-primary/20' : ''}`}>
+            <div className={`relative input-glow rounded-lg transition-all duration-300 ${focusedField === 'email' ? 'ring-2 ring-primary/20' : ''}`}>
               <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <Input
-                id="username"
+                id="email"
                 type="text"
                 placeholder="seu.usuario"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                onFocus={() => setFocusedField('username')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                onFocus={() => setFocusedField('email')}
                 onBlur={() => setFocusedField(null)}
                 className="pl-10 h-12 bg-background border-border focus:border-primary transition-all duration-300"
+                disabled={isLoading}
               />
             </div>
           </motion.div>
@@ -126,12 +148,14 @@ const LoginForm = () => {
                 onFocus={() => setFocusedField('password')}
                 onBlur={() => setFocusedField(null)}
                 className="pl-10 pr-10 h-12 bg-background border-border focus:border-primary transition-all duration-300"
+                disabled={isLoading}
               />
               <motion.button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                 whileTap={{ scale: 0.9 }}
+                disabled={isLoading}
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
