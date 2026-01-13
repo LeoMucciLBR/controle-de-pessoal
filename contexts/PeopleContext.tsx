@@ -27,7 +27,11 @@ export function PeopleProvider({ children }: { children: ReactNode }) {
             setLoading(true);
             setError(null);
             const response = await fetch('/api/people');
-            if (!response.ok) throw new Error('Erro ao buscar pessoas');
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                console.error('❌ [PeopleContext] Erro Detalhado do Servidor:', errorData);
+                throw new Error(errorData.details || 'Erro ao buscar pessoas');
+            }
             
             const data = await response.json();
             console.log('✅ [PeopleContext] Pessoas carregadas:', data);
