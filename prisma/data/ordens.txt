@@ -1,0 +1,277 @@
+0024.23	15/03/2023	001	20/03/2024	Edna Naomi	Eixo - 2	-
+0017.23	20/03/2023	002	15/04/2024	Juliana Siqueira Lima	Eixo - 1	-
+0031.23	20/04/2023	003	20/04/2023	Abner Rodrigo Toledo Maria	Eixo - 1	-
+0030.23	20/04/2023	004	20/04/2024	Willian Henrique Vieira Gonçalves	Eixo - 1	-
+0011.23	23/03/2023	005	15/04/2023	Mônica Gislaine Haenel	Eixo - 1	 R$ 120,00 
+0046.23	28/08/2023	007	01/09/2023	Isaías Alves de Souza	Entrevias 1	-
+0056.23	13/09/2023	008	13/09/2023	Isaías Alves de Souza	Ecoriominas 1	-
+0046.23	28/08/2023	010	31/08/2023	Luciana de Paula Souza	Entrevias 1	-
+0042.23	13/09/2023	012	01/12/2023	Mônica Gislaine Haenel	Ecopistas 1	 R$ 120,00 
+0047.23	13/09/2023	013	14/09/2023	Mônica Gislaine Haenel	Entrevias 1	 R$ 120,00 
+0047.23	13/09/2023	035	28/08/2023	José Marcos Guimarães 	Entrevias 1	 R$ 120,00 
+0042.23	13/09/2023	015	28/08/2023	José Marcos Guimarães 	Ecopistas 1	 R$ 120,00 
+0057.23	13/09/2023	016	23/04/2024	José Marcos Guimarães 	Ecoriominas 1	 R$ 2.000,00 
+0048.23	28/08/2023	017	28/08/2023	Luciano Maciel	Ecopistas 1	-
+0062.23	30/08/2023	019	29/09/2023	Luciano Maciel	Eixo - 1	-
+0030.24	27/06/2024	018	02/10/2024	Luciano Maciel	Ecoriominas 1	-
+0051.23	28/08/2023	020	28/08/2023	Ricardo Cardoso Dias	Entrevias 1	-
+0053.23	28/08/2023	021	01/09/2023	Alexandre Pansani	Entrevias 1	-
+0071.23	06/10/2023	022	11/10/2023	Antônio Roberto Sardinha	Eixo - 1	-
+0039.23	20/06/2023	025	20/06/2023	Mario Roberto Bazarra Larios	Eixo - 1	-
+0053.23	28/08/2023	023	28/08/2023	Mario Roberto Bazarra Larios	Entrevias 1	 R$ 110,00 
+0052.23	28/08/2023	024	28/08/2023	Mario Roberto Bazarra Larios	Ecopistas 1	 R$ 110,00 
+0075.23	24/11/2023	026	24/11/2023	Leandro Kuster	Eixo - 1	Pacote
+0075.23	24/11/2023	026.A	24/11/2023	Artur Lenz Sartorti	Eixo - 1	-
+0080.23	07/12/2023	027	08/12/2023	Fernanda Gadler	Ecopistas 1	Pacote
+0015.23	27/02/2023	028	20/12/2023	Fernanda Gadler	Eixo - 1	Pacote
+0079.23	18/12/2023	029	18/12/2023	Artur Lenz Sartorti	Ecopistas 1	-
+0079.23	18/12/2023	030	18/12/2023	Leandro Kuster	Ecopistas 1	Pacote
+0004.23	10/09/2023	031	01/11/2023	Antônio Roberto Sardinha	Ecopistas 1	 R$ 130,00 
+0048.23	28/08/2023	032	12/04/2024	Jaime Linhares de Sousa	Ecopistas 1	-
+0062.23	13/09/2023	033	14/09/2023	Jaime Linhares de Sousa	Eixo - 1	-
+0052.23	28/08/2023	036	28/08/2023	Alexandre Pansani	Ecopistas 1	-
+0050.23	28/08/2023	037	28/08/2023	Ronaldo Ferreira de Morais Silva	Ecopistas 1	-
+0021.24	20/05/2024	038	20/05/2024	Pedro Rodrigues Correia	Ecoriominas 1	 R$ 5.850,00 
+0021.24	20/05/2024	039	25/06/2024	Pedro Rodrigues Correia	Rota Das Bandeiras 1	 R$ 33.600,00 
+0026.24	28/06/2024	040	28/06/2024	Mario Roberto Bazarra Larios	Rota Das Bandeiras 1	 R$ 120,00 
+0026.24	28/06/2024	041	01/05/2024	Mario Roberto Bazarra Larios	Econoroeste 1	 R$ 120,00 
+0026.24	28/06/2024	042	28/06/2024	Alexandre Pansani	Rota Das Bandeiras 1	 R$ 110,00 
+0025.24	24/06/2024	043	28/06/2024	José Marcos Guimarães 	Econoroeste 1	 R$ 120,00 
+0025.24	24/06/2024	044	01/07/2024	José Marcos Guimarães 	Ecoriominas 1	 R$ 2.000,00 
+0029.24	01/07/2024	045	02/07/2024	Luciana de Paula Souza	Rota Das Bandeiras 1	 R$ 120,00 
+0022.24	15/05/2024	046	16/05/2024	Mônica Gislaine Haenel	Econoroeste 1	 R$ 120,00 
+0022.24	15/05/2024	047	18/06/2024	Mônica Gislaine Haenel	Rota Das Bandeiras 1	 R$ 120,00 
+0035.24	28/06/2024	048	28/06/2024	Antônio Roberto Sardinha	Rota Das Bandeiras 1	 R$ 120,00 
+0035.24	28/06/2024	049	22/04/2024	Antônio Roberto Sardinha	Ecoriominas 1	 R$ 3.600,00 
+0026.24	28/06/2024	051	10/07/2024	Alexandre Pansani	Entrevias 1	 R$ 110,00 
+0026.24	28/06/2024	052	10/07/2024	Alexandre Pansani	Ecopistas 1	 R$ 110,00 
+0022.24	15/05/2024	053	10/07/2024	Mônica Gislaine Haenel	Entrevias 1	 R$ 120,00 
+0022.24	15/05/2024	054	10/07/2024	Mônica Gislaine Haenel	Ecopistas 1	 R$ 120,00 
+0030.24	28/06/2024	055	05/08/2024	Jaime Linhares de Sousa	Rota Das Bandeiras 1	 R$ 120,00 
+0026.24	28/06/2024	056	10/07/2024	Mario Roberto Bazarra Larios	Entrevias 1	 R$ 110,00 
+0026.24	28/06/2024	057	10/07/2024	Mario Roberto Bazarra Larios	Ecopistas 1	 R$ 110,00 
+0026.24	28/06/2024	058	26/07/2024	Mario Roberto Bazarra Larios	Ecoriominas 1	 R$ 80,00 
+0025.24	24/06/2024	059	10/07/2024	José Marcos Guimarães 	Entrevias 1	 R$ 120,00 
+0025.24	24/06/2024	060	10/07/2024	José Marcos Guimarães 	Ecopistas 1	 R$ 120,00 
+0030.24	28/06/2024	061	05/08/2024	Jaime Linhares de Sousa	Entrevias 1	 R$ 120,00 
+0025.24	24/06/2024	062	05/08/2024	José Marcos Guimarães 	Rota Das Bandeiras 1	 R$ 120,00 
+0033.24	28/06/2024	063	16/08/2024	Patricio Araujo Freitas 	Rota Das Bandeiras 1	 R$ 2.000,00 
+066.23	21/09/2023	064	22/09/2023	Marcelo Sganzella	Entrevias 1	 R$ 110,00 
+0022.24	15/05/2024	065	15/07/2024	Mônica Gislaine Haenel	Ecoriominas 1	 R$ 95,00 
+0030.24	27/06/2024	066	01/08/2024	Luciano Maciel	Rota Das Bandeiras 1	 R$ 120,00 
+0026.24	28/06/2024	067	28/08/2024	Mario Roberto Bazarra Larios	Constroeste 1	 R$ 110,00 
+0025.24	24/06/2024	068	06/08/2024	José Marcos Guimarães 	Ecopistas 2	 R$ 120,00 
+0026.24	28/06/2024	069	06/08/2024	Mario Roberto Bazarra Larios	Ecopistas 2	 R$ 110,00 
+0025.24	24/06/2024	070	28/08/2024	José Marcos Guimarães 	Constroeste 1	 R$ 120,00 
+0026.24	28/06/2024	071	28/08/2024	Alexandre Pansani	Constroeste 1	 R$ 110,00 
+0029.24	01/07/2024	072	28/08/2024	Luciana de Paula Souza	Constroeste 1	 R$ 120,00 
+0021.24	20/05/2024	073	28/08/2024	Pedro Rodrigues Correia	Constroeste 1	 R$ 2.000,00 
+0035.24	28/06/2024	074	28/08/2024	Antônio Roberto Sardinha	Constroeste 1	 R$ 130,00 
+0022.24	15/05/2024	075	28/08/2024	Mônica Gislaine Haenel	Constroeste 1	 R$ 120,00 
+0039.24	13/09/2024	076	02/10/2024	Bruno Martins de Camargo	Constroeste 1	 R$ 520,00 
+0031.24	02/07/2024	078	07/09/2024	Ronaldo Ferreira de Morais Silva	Ecoriominas 1	 R$ 80,00 
+0030.24	28/06/2024	079	07/10/2024	Jaime Linhares de Sousa	Ecoriominas 1	 R$ 80,00 
+034.24	28/06/2024	080	10/10/2024	Artur Lenz Sartorti	Everest 1	 R$ 80,00 
+0030.24	28/06/2024	081	10/10/2024	Jaime Linhares de Sousa	Everest 1	 R$ 80,00 
+0030.24	28/06/2024	082	10/10/2024	Luciano Maciel	Everest 1	 R$ 80,00 
+0034.24	28/06/2024	083	10/10/2024	Leandro Kuster	Everest 1	 R$ 80,00 
+0058.24	26/09/2024	084	16/10/2024	Verônica Tejada	Ecoriominas 1	 R$ 80,00 
+0034.24	28/06/2024	085	05/10/2024	Artur Lenz Sartorti	Ecoriominas 1	 R$ 80,00 
+0058.24	26/09/2024	086	17/10/2024	Verônica Tejada	Everest 1	 R$ 80,00 
+0034.24	28/06/2024	087	02/10/2024	Leandro Kuster	Ecoriominas 1	 R$ 80,00 
+0029.24	01/07/2024	088	02/10/2024	Luciana de Paula Souza	Ecoriominas 1	 R$ 80,00 
+026.24	28/06/2024	089	02/10/2024	Alexandre Pansani	Ecoriominas 1	 R$ 80,00 
+0035.24	28/06/2024	091	12/04/2024	Antônio Roberto Sardinha	Ecoriominas 1	 R$ 80,00 
+0058.24	26/09/2024	092	12/11/2024	Verônica Tejada	Rota Das Bandeiras 1	 R$ 80,00 
+0034.24	28/06/2024	093	28/11/2024	Artur Lenz Sartorti	Tranenge - 1 	 R$ 80,00 
+0026.24	28/06/2024	094	28/11/2024	Mario Roberto Bazarra Larios	Tranenge - 1 	 R$ 80,00 
+0025.24	24/06/2024	095	28/11/2024	José Marcos Guimarães 	Tranenge - 1 	 R$ 120,00 
+0034.24	28/06/2024	096	28/11/2024	Leandro Kuster	Tranenge - 1 	 R$ 80,00 
+0031.24	02/07/2024	097	17/12/2024	Ronaldo Ferreira de Morais Silva	Ecosul 1	 R$ 80,00 
+0034.24	28/06/2024	098	17/12/2024	Artur Lenz Sartorti	Ecosul 1	 R$ 80,00 
+0034.24	28/06/2024	099	17/12/2024	Leandro Kuster	Ecosul 1	 R$ 80,00 
+0029.24	01/07/2024	100	17/12/2024	Luciana de Paula Souza	Ecosul 1	 R$ 80,00 
+026.24	28/06/2024	101	17/12/2024	Alexandre Pansani	Ecosul 1	 R$ 80,00 
+0022.24	15/05/2024	102	17/12/2024	Mônica Gislaine Haenel	Ecosul 1	 R$ 95,00 
+0026.24	28/06/2024	103	17/12/2024	Mario Roberto Bazarra Larios	Ecosul 1	 R$ 80,00 
+0030.24	28/06/2024	104	17/12/2024	Jaime Linhares de Sousa	Ecosul 1	 R$ 80,00 
+0030.24	28/06/2024	105	17/12/2024	Luciano Maciel	Ecosul 1	 R$ 80,00 
+0033.24	28/06/2024	106	17/12/2024	Patricio Araujo Freitas 	Ecosul 1	 R$ 80,00 
+0058.24	26/09/2024	108	08/01/2025	Verônica Tejada	Ecosul 1	 R$ 80,00 
+061.24	09/01/2025	109	14/01/2025	Mauro Vicenzo 	Ecoriominas 1	 R$ 80,00 
+061.24	09/01/2025	110	14/01/2025	Mauro Vicenzo 	Ecosul 1	 R$ 80,00 
+0062.24	17/01/2025	111	22/01/2025	Dalmar Vitor Vinciprova Faria Netto	Ecoriominas 1	 R$ 80,00 
+0062.24	17/01/2025	112	22/01/2025	Dalmar Vitor Vinciprova Faria Netto	Ecosul 1	 R$ 80,00 
+0001.25	14/01/2025	113	17/01/2025	Ronaldo Ferreira de Morais Silva	Ecosul 1	 R$ 80,00 
+0058.24	26/09/2024	114	28/01/2025	Verônica Tejada	Eixo- 3 	 R$ 80,00 
+0034.24	28/06/2024	115	28/01/2025	Artur Lenz Sartorti	Eixo- 3 	 R$ 80,00 
+0034.24	28/06/2024	116	28/01/2025	Leandro Kuster	Eixo- 3 	 R$ 80,00 
+0022.24	15/05/2024	117	28/01/2025	Mônica Gislaine Haenel	Eixo- 3 	 R$ 95,00 
+0026.24	28/06/2024	118	28/01/2025	Mario Roberto Bazarra Larios	Eixo- 3 	 R$ 80,00 
+0001.25	14/01/2025	119	28/01/2025	Ronaldo Ferreira de Morais Silva	Eixo- 3 	 R$ 80,00 
+0026.24	28/06/2024	120	28/01/2025	Alexandre Pansani	Eixo- 3 	 R$ 80,00 
+0052.24	16/12/2024	121	30/01/2025	Luciana de Paula Souza	Eixo- 3 	 R$ 80,00 
+0031.24	24/06/2024	122	11/02/2025	Ricardo Cardoso Dias	Ecosul 1	 R$ 95,00 
+0031.24	24/06/2024	123	11/02/2025	Ricardo Cardoso Dias	Eixo- 3 	 R$ 95,00 
+0022.24	15/05/2024	123	18/03/2025	Mônica Gislaine Haenel	Porto Guará	 R$ 95,00 
+0025.24	24/06/2024	124	07/03/2025	José Marcos Guimarães 	Eixo- 3 	 R$ 120,00 
+0031.24	24/06/2024	124	18/03/2025	Ricardo Cardoso Dias	Porto Guará	 R$ 95,00 
+0058.24	26/09/2024	125	18/03/2025	Verônica Tejada	Porto Guará	 R$ 80,00 
+0034.24	28/06/2024	126	18/03/2025	Artur Lenz Sartorti	Porto Guará	 R$ 80,00 
+0034.24	28/06/2024	127	18/03/2025	Leandro Kuster	Porto Guará	 R$ 80,00 
+0001.25	14/01/2025	128	18/03/2025	Ronaldo Ferreira de Morais Silva	Porto Guará	 R$ 80,00 
+0030.24	28/06/2024	128	18/03/2025	Jaime Linhares de Sousa	Porto Guará	 R$ 80,00 
+0053.34	09/01/2025	129	18/03/2025	Luciano Maciel	Porto Guará	 R$ 80,00 
+0026.24	28/06/2024	130	18/03/2025	Mario Roberto Bazarra Larios	Porto Guará	 R$ 80,00 
+0054.24	03/02/2025	131	18/03/2025	Alexandre Pansani	Porto Guará	 R$ 80,00 
+0033.24	28/06/2024	132	18/03/2025	Patricio Araujo Freitas 	Porto Guará	 R$ 500,00 
+0052.24	16/12/2024	133	18/03/2025	Luciana de Paula Souza	Porto Guará	 R$ 80,00 
+0008.25	23/03/2025	134	27/03/2025	Elionei Alves Guimarães	Eixo- 3 	 R$ 100,00 
+0033.24	28/06/2024	134	31/03/2025	Patricio Araujo Freitas 	Econoroeste 1	 R$ 300,00 
+0001.25	14/01/2025	135	01/04/2025	Ronaldo Ferreira de Morais Silva	Arteris	 R$ 80,00 
+0058.24	26/09/2024	136	01/04/2025	Verônica Tejada	Arteris	 R$ 80,00 
+0062.24	17/01/2025	137	04/04/2025	Dalmar Vitor Vinciprova Faria Netto	Arteris	 R$ 80,00 
+0052.24	16/12/2024	138	03/04/2025	Luciana de Paula Souza	Arteris	 R$ 80,00 
+0034.24	28/06/2024	139	02/04/2025	Artur Lenz Sartorti	Arteris	 R$ 80,00 
+0034.24	28/06/2024	140	01/04/2025	Leandro Kuster	Arteris	 R$ 80,00 
+0054.24	03/02/2025	141	01/04/2025	Alexandre Pansani	Arteris	 R$ 80,00 
+0026.24	28/06/2024	142	01/04/2025	Mario Roberto Bazarra Larios	Arteris	 R$ 80,00 
+0025.24	24/06/2024	143	01/04/2025	José Marcos Guimarães 	Arteris	 R$ 110,00 
+0022.24	15/05/2024	144	07/04/2025	Mônica Gislaine Haenel	Arteris	 R$ 95,00 
+0026.24	28/06/2024	145	08/04/2025	Mario Roberto Bazarra Larios	Porto Guará	 R$ 80,00 
+0022.24	15/05/2024	146	08/04/2025	Mônica Gislaine Haenel	Porto Guará	 R$ 95,00 
+0062.24	17/01/2025	147	08/04/2025	Dalmar Vitor Vinciprova Faria Netto	Porto Guará	 R$ 80,00 
+0025.24	24/06/2024	148	15/04/2025	José Marcos Guimarães 	Estatica - 1	 R$ 110,00 
+0033.24	28/06/2024	149	05/05/2025	Patricio Araujo Freitas 	Arteris	 R$ 100,00 
+0012.25	28/04/2025	150	08/05/2025	José Luis Bevilacqua	Simulado De Ferrovia	 R$ 6.250,00 
+0059.24	27/12/2024	151	07/05/2025	Monica Garrido Sarraf	Simulado De Edificação/Hab	 R$ 10.000,00 
+0026.24	28/06/2024	152	12/06/2025	Mario Roberto Bazarra Larios	Ecovias Imigrantes 1	 R$ 80,00 
+0034.24	28/06/2024	153	22/05/2025	Artur Lenz Sartorti	Sp Mar	 R$ 120,00 
+0034.24	28/06/2024	154	22/05/2025	Leandro Kuster	Sp Mar	 R$ 120,00 
+0058.24	26/09/2024	155	22/05/2025	Verônica Tejada	Sp Mar	 R$ 120,00 
+0022.24	15/05/2024	156	22/05/2025	Mônica Gislaine Haenel	Sp Mar	 R$ 150,00 
+0030.24	28/06/2024	157	22/05/2025	Jaime Linhares de Sousa	Sp Mar	 R$ 120,00 
+0030.24	28/06/2024	158	22/05/2025	Luciano Maciel	Sp Mar	 R$ 120,00 
+0025.24	24/06/2024	159	22/05/2025	José Marcos Guimarães 	Sp Mar	 R$ 150,00 
+0026.24	28/06/2024	160	22/05/2025	Mario Roberto Bazarra Larios	Sp Mar	 R$ 100,00 
+0054.24	03/02/2025	161	22/05/2025	Alexandre Pansani	Sp Mar	 R$ 100,00 
+0052.24	16/12/2024	162	22/05/2025	Luciana de Paula Souza	Sp Mar	 R$ 120,00 
+0001.25	14/01/2025	163	22/05/2025	Ronaldo Ferreira de Morais Silva	Sp Mar	 R$ 120,00 
+0008.25	23/03/2025	164	22/05/2025	Elionei Alves Guimarães	Sp Mar	 R$ 120,00 
+0033.24	28/06/2024	165	22/05/2025	Patricio Araujo Freitas 	Sp Mar	 R$ 700,00 
+0001.25	14/01/2025	166	12/06/2025	Ronaldo Ferreira de Morais Silva	Ecovias Imigrantes 1	 R$ 80,00 
+00014.25	30/05/2025	167	23/06/2025	Ronaldo Tomanin	Ecoriominas 1	 R$ 750,00 
+0034.24	28/06/2024	168	03/06/2025	Artur Lenz Sartorti	Rota Das Bandeiras 1	 R$ 80,00 
+0034.24	28/06/2024	169	03/06/2025	Leandro Kuster	Rota Das Bandeiras 1	 R$ 80,00 
+0032.24	26/06/2024	170	30/06/2025	Renato Delphini	Eixo- 3 	 R$ 80,00 
+0015.25	26/06/2025	171	27/06/2025	Samuel Dunae	Ufinet-1	 R$ 80,00 
+0035.24	28/06/2024	172	08/07/2025	Antônio Roberto Sardinha	Caminhos Do Paraná	 R$ 120,00 
+0015.25	26/06/2025	173	08/07/2025	Samuel Dunae	Caminhos Do Paraná	 R$ 80,00 
+0034.24	28/06/2024	174	08/07/2025	Artur Lenz Sartorti	Caminhos Do Paraná	 R$ 80,00 
+0034.24	28/06/2024	175	08/07/2025	Leandro Kuster	Caminhos Do Paraná	 R$ 80,00 
+0030.24	28/06/2024	176	08/07/2025	Jaime Linhares de Sousa	Caminhos Do Paraná	 R$ 80,00 
+0053.24	09/01/2025	177	08/07/2025	Luciano Maciel	Caminhos Do Paraná	 R$ 80,00 
+0052.24	16/12/2024	178	08/07/2025	Luciana de Paula Souza	Caminhos Do Paraná	 R$ 80,00 
+0058.24	26/09/2024	179	08/07/2025	Verônica Tejada	Caminhos Do Paraná	 R$ 80,00 
+0001.25	14/01/2025	180	08/07/2025	Ronaldo Ferreira de Morais Silva	Caminhos Do Paraná	 R$ 80,00 
+0022.24	15/05/2024	181	08/07/2025	Mônica Gislaine Haenel	Caminhos Do Paraná	 R$ 95,00 
+0017.25	08/07/2025	182	10/07/2025	Bruna Mirellen	Ecovias Imigrantes 4	 R$ 80,00 
+0030.24	28/06/2024	183	10/07/2025	Jaime Linhares de Sousa	Ecovias Imigrantes 4	 R$ 80,00 
+0053.24	09/01/2025	184	10/07/2025	Luciano Maciel	Ecovias Imigrantes 4	 R$ 80,00 
+0016.25	26/06/2025	185	10/07/2025	José Mendonça	Ecovias Imigrantes 4	 R$ 80,00 
+0015.25	26/06/2025	186	14/07/2025	Samuel Dunae	Ecovias Imigrantes 2	 R$ 80,00 
+0058.24	26/09/2024	187	08/07/2025	Verônica Tejada	Ecovias Imigrantes 2	 R$ 80,00 
+0015.25	26/06/2025	188	17/07/2025	Samuel Dunae	Ecovias Imigrantes 3	 R$ 80,00 
+0058.24	26/09/2024	189	17/07/2025	Verônica Tejada	Ecovias Imigrantes 3	 R$ 80,00 
+0026.24	28/06/2024	190	17/07/2025	Mario Roberto Bazarra Larios	Ecovias Imigrantes 3	 R$ 80,00 
+0054.24	03/02/2025	191	17/07/2025	Alexandre Pansani	Ecovias Imigrantes 3	 R$ 80,00 
+0022.24	15/05/2024	192	17/07/2025	Mônica Gislaine Haenel 	Ecovias Imigrantes 4	 R$ 95,00 
+0058.24	26/09/2024	193	17/07/2025	Verônica Tejada	Ecovias Imigrantes 4	 R$ 80,00 
+0015.25	26/06/2025	194	17/07/2025	Samuel Dunae	Ecovias Imigrantes 4	 R$ 80,00 
+0022.24	15/05/2024	195	17/07/2025	Mônica Gislaine Haenel 	Ecovias Imigrantes 3	 R$ 95,00 
+0015.25	26/06/2025	196	22/07/2025	Samuel Dunae	Eixo - 1	 R$ 80,00 
+0058.24	26/09/2024	197	23/07/2025	Verônica Tejada	Eixo - 1	 R$ 80,00 
+0015.25	26/06/2025	198	23/07/2025	Samuel Dunae	Estatica - 1	 R$ 80,00 
+0032.24	26/06/2024	199	23/07/2025	Renato Delphini	Eixo - 1	 R$ 80,00 
+0022.24	15/05/2024	200	28/07/2025	Mônica Gislaine Haenel 	Ecovias Imigrantes 1	 R$ 95,00 
+0017.25	08/07/2025	201	14/08/2025	Bruna Mirellen	Eixo- 3 	 R$ 80,00 
+0015.25	26/06/2025	202	14/08/2025	Samuel Dunae	Estatica - 2	 R$ 80,00 
+0015.25	26/06/2025	203	19/08/2025	Joyce Suelen Silva de Souza	Eixo - 1	 R$ 80,00 
+0015.25	26/06/2025	204	19/08/2025	Joyce Suelen Silva de Souza	Ecovias Imigrantes 2	 R$ 80,00 
+0015.25	26/06/2025	205	19/08/2025	Joyce Suelen Silva de Souza	Ecovias Imigrantes 3	 R$ 80,00 
+0025.24	24/06/2024	206	19/08/2025	José Marcos Guimarães 	Estatica - 2	 R$ 110,00 
+0054.24	03/02/2025	207	21/08/2025	Alexandre Pansani	Eixo - 1	 R$ 80,00 
+0001.25	14/01/2025	208	08/07/2025	Ronaldo Ferreira de Morais Silva	Ecovias Imigrantes 3	 R$ 80,00 
+0052.24	16/12/2024	209	26/08/2025	Luciana de Paula Souza	Ecovias Imigrantes 3	 R$ 100,00 
+0035.24	28/06/2024	210	26/08/2025	Antônio Roberto Sardinha	Ecovias Imigrantes 3	 R$ 120,00 
+0058.24	26/09/2024	211	26/08/2025	Verônica Tejada	Ecovias Imigrantes 1	 R$ 80,00 
+0023.25	09/08/2025	212	03/09/2025	Lucas Pereira de Araujo	Rota Das Bandeiras 1	 R$ 1.500,00 
+0054.24	03/02/2025	213	09/09/2025	Alexandre Pansani	Caminhos Do Paraná	 R$ 80,00 
+0023.25	09/08/2025	214	09/09/2025	Lucas Pereira de Araujo	Arteris	 R$ 1.500,00 
+0015.25	26/06/2025	215	17/09/2025	Samuel Dunae	Catvv - 1	 R$ 80,00 
+0034.24	28/06/2024	216	01/10/2025	Artur Lenz Sartorti	Tranenge -3	 R$ 80,00 
+0026.24	28/06/2024	217	01/10/2025	Mario Roberto Bazarra Larios	Tranenge -3	 R$ 80,00 
+0015.25	26/06/2025	218	03/10/2025	Samuel Dunae	Ecovias Imigrantes 5	 R$ 80,00 
+0022.24	15/05/2024	219	03/10/2025	Mônica Gislaine Haenel 	Ecovias Imigrantes 5	 R$ 95,00 
+0035.24	28/06/2024	220	03/10/2025	Antônio Roberto Sardinha	Ecovias Imigrantes 5	 R$ 120,00 
+0015.25	26/06/2025	221	03/10/2025	Joyce Suelen Silva de Souza	Ecovias Imigrantes 5	 R$ 80,00 
+0001.25	14/01/2025	222	08/10/2025	Ronaldo Ferreira de Morais Silva	Ecovias Imigrantes 5	 R$ 80,00 
+0052.24	16/12/2024	223	08/10/2025	Luciana de Paula Souza	Ecovias Imigrantes 5	 R$ 80,00 
+0054.24	03/02/2025	224	08/10/2025	Alexandre Pansani	Ecovias Imigrantes 5	 R$ 80,00 
+0034.24	28/06/2024	225	08/10/2025	Artur Lenz Sartorti	Ecovias Imigrantes 5	 R$ 80,00 
+0034.24	28/06/2024	226	08/10/2025	Leandro Kuster	Ecovias Imigrantes 5	 R$ 80,00 
+0058.24	26/09/2024	227	08/10/2025	Verônica Tejada	Ecovias Imigrantes 5	 R$ 80,00 
+0015.25	26/06/2025	228	10/10/2025	Samuel Dunae	Ecoriominas 1	 R$ 80,00 
+0015.25	26/06/2025	229	10/10/2025	Joyce Suelen Silva de Souza	Ecoriominas 1	 R$ 80,00 
+0025.25	30/09/2025	230	10/10/2025	Jorge Luis Vieira Da Silva	Ecoriominas 1	 R$ 80,00 
+00026/25	07/10/2025	231	10/10/2025	Ricardo Pinheiro 	Radi-1	 R$ 10.000,00 
+0015.25	26/06/2025	232	13/10/2025	Samuel Dunae	Partecal 1	 R$ 80,00 
+0022.24	15/05/2024	233	13/10/2025	Mônica Gislaine Haenel 	Partecal 1	 R$ 95,00 
+0052.24	16/12/2024	234	13/10/2025	Luciana de Paula Souza	Partecal 1	 R$ 80,00 
+0058.24	26/09/2024	235	13/10/2025	Verônica Tejada	Partecal 1	 R$ 80,00 
+0025.25	30/09/2025	236	15/10/2025	Jorge Luis Vieira Da Silva	Rota Das Bandeiras 1	 R$ 80,00 
+0034.24	28/06/2024	237	16/10/2025	Artur Lenz Sartorti	Tranenge -2	 R$ 80,00 
+0034.24	28/06/2024	238	16/10/2025	Leandro Kuster	Tranenge -2	 R$ 80,00 
+0025.25	30/09/2025	239	16/10/2025	Jorge Luis Vieira Da Silva	Tranenge -2	 R$ 100,00 
+0029.25	17/10/2025	240	22/10/2025	Hercílio Glória	Ecosul 1	 R$ 1.000,00 
+0034.24	28/06/2024	241	12/11/2025	Artur Lenz Sartorti	Rota das Bandeiras - 2	 R$ 80,00 
+0015.25	26/06/2025	242	12/11/2025	Samuel Dunae	Rota das Bandeiras - 2	 R$ 80,00 
+0022.24	15/05/2024	243	12/11/2025	Mônica Gislaine Haenel 	Rota das Bandeiras - 2	 R$ 95,00 
+0025.25	30/09/2025	244	12/11/2025	Jorge Luis Vieira Da Silva	Rota das Bandeiras - 2	 R$ 80,00 
+0052.24	16/12/2024	245	12/11/2025	Luciana de Paula Souza	Rota das Bandeiras - 2	 R$ 100,00 
+0058.24	26/09/2024	246	12/11/2025	Verônica Tejada	Rota das Bandeiras - 2	 R$ 80,00 
+0015.25	26/06/2025	247	12/11/2025	Joyce Suelen Silva de Souza	Rota das Bandeiras - 2	 R$ 80,00 
+0054.24	03/02/2025	248	12/11/2025	Alexandre Pansani	Rota das Bandeiras - 2	 R$ 80,00 
+0034.24	28/06/2024	249	12/11/2025	Leandro Kuster	Rota das Bandeiras - 2	 R$ 80,00 
+0029.25	17/10/2025	250	17/11/2025	Hercílio Glória	Ecovias Imigrantes - 1	 R$ 1.000,00 
+0022.24	15/05/2024	251	17/11/2025	Mônica Gislaine Haenel 	SPMAR - 3	 R$ 95,00 
+0015.25	26/06/2025	252	17/11/2025	Samuel Dunae	SPMAR - 3	 R$ 80,00 
+0034.24	28/06/2024	253	17/11/2025	Artur Lenz Sartorti	SPMAR - 3	 R$ 80,00 
+0034.24	28/06/2024	254	17/11/2025	Leandro Kuster	SPMAR - 3	 R$ 80,00 
+0052.24	16/12/2024	255	17/11/2025	Luciana de Paula Souza	SPMAR - 3	 R$ 80,00 
+0058.24	26/09/2024	256	17/11/2025	Verônica Tejada	SPMAR - 3	 R$ 80,00 
+0017.25	08/07/2025	257	17/11/2025	Bruna Mirellen	SPMAR - 3	 R$ 80,00 
+0054.24	03/02/2025	258	17/11/2025	Alexandre Pansani	SPMAR - 3	 R$ 80,00 
+0001.25	14/01/2025	259	17/11/2025	Ronaldo Ferreira de Morais Silva	Rota das Bandeiras - 2	 R$ 80,00 
+0035.24	28/06/2024	260	01/12/2025	Antônio Roberto Sardinha	Partecal 1	 R$ 120,00 
+0029.25	17/10/2025	261	04/12/2025	Hercílio Glória	Ecovias Imigrantes - 3	 R$ 1.000,00 
+0029.25	17/10/2025	262	09/12/2025	Hercílio Glória	Ecovias Imigrantes - 5	 R$ 1.000,00 
+0015.25	26/06/2025	263	09/12/2025	Joyce Suelen Silva de Souza	SPMAR - 3	 R$ 80,00 
+0022.24	15/05/2024	264	10/12/2025	Mônica Gislaine Haenel 	SPMAR - 4	 R$ 95,00 
+0034.24	28/06/2024	265	11/12/2025	Artur Lenz Sartorti	SPMAR - 4	 R$ 80,00 
+0034.24	28/06/2024	266	11/12/2025	Leandro Kuster	SPMAR - 4	 R$ 80,00 
+0052.24	16/12/2024	267	11/12/2025	Luciana de Paula Souza	SPMAR - 4	 R$ 80,00 
+0058.24	26/09/2024	268	11/12/2025	Verônica Tejada	SPMAR - 4	 R$ 80,00 
+0001.25	14/01/2025	269	11/12/2025	Ronaldo Ferreira de Morais Silva	SPMAR - 4	 R$ 80,00 
+0025.25	30/09/2025	270	11/12/2025	Jorge Luis Vieira Da Silva	SPMAR - 4	 R$ 80,00 
+0015.25	26/06/2025	271	11/12/2025	Samuel Dunae	SPMAR - 4	 R$ 80,00 
+0015.25	26/06/2025	272	11/12/2025	Joyce Suelen Silva de Souza	SPMAR - 4	 R$ 80,00 
+0023.25	09/08/2025	273	15/12/2025	Lucas Pereira de Araujo	Ecovias Imigrantes - 5	 R$ 1.500,00 
+0025.24	24/06/2024	274	06/01/2026	José Marcos Guimarães 	Adoro - 1	 R$ 120,00 
+0025.24	24/06/2024	275	06/01/2026	José Marcos Guimarães 	Telar Augusto Veloso -1	 R$ 120,00 
+0023.25	09/08/2025	276	07/01/2026	Lucas Pereira de Araujo	Ecovias Imigrantes - 2	 R$ 1.000,00 
+0022.24	15/05/2024	277	07/01/2026	Mônica Gislaine Haenel 	A3F - 1	 R$ 80,00 
+0058.24	26/09/2024	278	07/01/2026	Verônica Tejada	A3F - 1	 R$ 80,00 
+0052.24	16/12/2024	279	07/01/2026	Luciana de Paula Souza	A3F - 1	 R$ 80,00 
+0035.24	28/06/2024	280	07/01/2026	Antônio Roberto Sardinha	A3F - 1	 R$ 120,00 
+0025.24	24/06/2024	281	07/01/2026	José Marcos Guimarães 	A3F - 1	 R$ 110,00

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -72,10 +73,17 @@ export function AppTopbar() {
           {/* Logo and Desktop Nav */}
           <div className="flex items-center gap-8">
             <Link href="/dashboard" className="flex items-center gap-2 font-bold text-xl tracking-tight text-foreground hover:opacity-90 transition-opacity">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-tr from-[#2f4982] to-[#4b6cb7]">
-                <span className="text-white text-xs font-bold">LBR</span>
+              <div className="relative h-10 w-auto">
+                 <Image 
+                   src="/logo.png" 
+                   alt="LBR Engenharia" 
+                   width={150} 
+                   height={50} 
+                   className="h-10 w-auto object-contain" 
+                   priority
+                 />
               </div>
-              <span>Controle</span>
+              <span className="hidden">Controle</span>
             </Link>
 
             {/* Desktop Navigation */}
