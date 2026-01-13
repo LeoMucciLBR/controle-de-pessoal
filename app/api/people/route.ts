@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic'; // Garante que a rota não seja cacheada estaticamente
+
 // GET - Buscar todas as pessoas (exceto apagadas)
 export async function GET() {
   try {
@@ -10,6 +12,7 @@ export async function GET() {
         NOT: { status: 'apagado' }
       },
       orderBy: { nome: 'asc' },
+      include: { contratosDetalhados: true } // Incluir contratos para listagem correta se necessário
     });
 
     return NextResponse.json(people);
@@ -64,12 +67,14 @@ export async function POST(request: NextRequest) {
         numeroRegistroConselho: body.numeroRegistroConselho || null,
         certidaoQuitacaoPf: body.certidaoQuitacaoPf || false,
         certidaoQuitacaoPj: body.certidaoQuitacaoPj || false,
+        certidaoQuitacaoData: body.certidaoQuitacaoData || null,
+        certidaoQuitacaoStatus: body.certidaoQuitacaoStatus || null,
         curriculo: body.curriculo || false,
         historicoProfissional: body.historicoProfissional || null,
         treinamentos: body.treinamentos || [],
         // ... outros campos anteriores ...
         areas: body.areas || [],
-        disciplina: body.disciplina || 'PROJETO',
+        areasDetalhes: body.areasDetalhes || undefined,
         competencias: body.competencias || [],
         disciplinasProjeto: body.disciplinasProjeto || [],
         disciplinasObra: body.disciplinasObra || [],
