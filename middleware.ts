@@ -32,8 +32,16 @@ export function middleware(request: NextRequest) {
   const sessionToken = request.cookies.get('session_token')?.value;
   const userId = request.cookies.get('user_id')?.value;
   
-  // Se não autenticado, redireciona para login
+  // Se não autenticado
   if (!sessionToken || !userId) {
+    // Para rotas de API, retorna JSON 401 ao invés de redirecionar
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { error: 'Não autenticado' },
+        { status: 401 }
+      );
+    }
+    // Para outras rotas, redireciona para login
     const loginUrl = new URL('/login', request.url);
     return NextResponse.redirect(loginUrl);
   }
