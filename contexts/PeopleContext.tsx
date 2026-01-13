@@ -30,6 +30,7 @@ export function PeopleProvider({ children }: { children: ReactNode }) {
             if (!response.ok) throw new Error('Erro ao buscar pessoas');
             
             const data = await response.json();
+            console.log('✅ [PeopleContext] Pessoas carregadas:', data);
             setPeople(data);
         } catch (err) {
             console.error('Erro ao carregar pessoas:', err);
