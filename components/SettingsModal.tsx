@@ -51,6 +51,12 @@ const categories: CategoryConfig[] = [
     description: 'Contratos ativos no sistema'
   },
   { 
+    id: 'clientes', 
+    label: 'Clientes', 
+    icon: Building2, 
+    description: 'Clientes para ordens de serviço'
+  },
+  { 
     id: 'disciplinasProjeto', 
     label: 'Disciplinas de Projeto', 
     icon: LayoutGrid, 
@@ -79,7 +85,8 @@ const categories: CategoryConfig[] = [
 export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
   const { 
     empresas, 
-    contratos, 
+    contratos,
+    clientes, 
     disciplinasProjeto, 
     disciplinasObra, 
     areas, 
@@ -95,6 +102,7 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
     switch (category) {
       case 'empresas': return empresas;
       case 'contratos': return contratos;
+      case 'clientes': return clientes;
       case 'disciplinasProjeto': return disciplinasProjeto;
       case 'disciplinasObra': return disciplinasObra;
       case 'areas': return areas.map(a => a.label);

@@ -83,10 +83,27 @@ model Person {
 // ============================================
 model Setting {
   id        Int      @id @default(autoincrement())
-  category  String   // empresas, contratos, disciplinasProjeto, disciplinasObra, areas, treinamentos
+  category  String   // empresas, contratos, disciplinasProjeto, disciplinasObra, areas, treinamentos, clientes
   value     String
   label     String?  // Para áreas que têm label diferente do value
   createdAt DateTime @default(now())
   
   @@unique([category, value])
+}
+
+// ============================================
+// ORDENS DE SERVIÇO
+// ============================================
+model OrdemServico {
+  id              Int      @id @default(autoincrement())
+  contrato        String   // Ex: "0042.23"
+  dataContrato    String   // Ex: "13/09/2023"
+  ordemServico    String   // Ex: "012"
+  dataOrdemServico String  // Ex: "01/12/2023"
+  nome            String   // Ex: "Mônica Gislaine Haenel"
+  cliente         String   // Ex: "Ecopistas 1" - vem do dropdown de clientes
+  valorNegociado  Float    // Ex: 120.00
+  status          String   @default("ativo") // ativo, apagado
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

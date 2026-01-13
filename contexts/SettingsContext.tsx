@@ -6,6 +6,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode, useCa
 interface SettingsContextType {
     empresas: string[];
     contratos: string[];
+    clientes: string[];
     disciplinasProjeto: string[];
     disciplinasObra: string[];
     areas: { value: string; label: string }[];
@@ -21,6 +22,7 @@ interface SettingsContextType {
 export type SettingsCategory = 
     | 'empresas' 
     | 'contratos' 
+    | 'clientes'
     | 'disciplinasProjeto' 
     | 'disciplinasObra' 
     | 'areas' 
@@ -31,6 +33,7 @@ const SettingsContext = createContext<SettingsContextType | undefined>(undefined
 export function SettingsProvider({ children }: { children: ReactNode }) {
     const [empresas, setEmpresas] = useState<string[]>([]);
     const [contratos, setContratos] = useState<string[]>([]);
+    const [clientes, setClientes] = useState<string[]>([]);
     const [disciplinasProjeto, setDisciplinasProjeto] = useState<string[]>([]);
     const [disciplinasObra, setDisciplinasObra] = useState<string[]>([]);
     const [areas, setAreas] = useState<{ value: string; label: string }[]>([]);
@@ -47,6 +50,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
             
             setEmpresas(data.empresas?.map((e: any) => e.value || e) || []);
             setContratos(data.contratos?.map((c: any) => c.value || c) || []);
+            setClientes(data.clientes?.map((c: any) => c.value || c) || []);
             setDisciplinasProjeto(data.disciplinasProjeto?.map((d: any) => d.value || d) || []);
             setDisciplinasObra(data.disciplinasObra?.map((d: any) => d.value || d) || []);
             setAreas(data.areas || []);
@@ -92,6 +96,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
                 case 'contratos':
                     setContratos(prev => [...prev, item]);
                     break;
+                case 'clientes':
+                    setClientes(prev => [...prev, item]);
+                    break;
                 case 'disciplinasProjeto':
                     setDisciplinasProjeto(prev => [...prev, item]);
                     break;
@@ -136,6 +143,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
                 case 'contratos':
                     setContratos(prev => prev.filter(i => i !== item));
                     break;
+                case 'clientes':
+                    setClientes(prev => prev.filter(i => i !== item));
+                    break;
                 case 'disciplinasProjeto':
                     setDisciplinasProjeto(prev => prev.filter(i => i !== item));
                     break;
@@ -159,6 +169,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         <SettingsContext.Provider value={{
             empresas,
             contratos,
+            clientes,
             disciplinasProjeto,
             disciplinasObra,
             areas,

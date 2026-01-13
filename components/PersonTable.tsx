@@ -155,6 +155,10 @@ export function PersonTable({
             <TableHead>
               <SortableHeader field="contrato">Contrato</SortableHeader>
             </TableHead>
+            <TableHead>
+              <SortableHeader field="dataAdmissao">Admissão</SortableHeader>
+            </TableHead>
+            <TableHead>Vigência</TableHead>
             <TableHead>Contato</TableHead>
             <TableHead className="w-12"></TableHead>
           </TableRow>
@@ -200,6 +204,12 @@ export function PersonTable({
               </TableCell>
               <TableCell className="text-sm">{person.empresa}</TableCell>
               <TableCell className="text-sm">{person.contrato}</TableCell>
+              <TableCell className="text-sm text-muted-foreground">{person.dataAdmissao || '-'}</TableCell>
+              <TableCell className="text-xs text-muted-foreground">
+                {person.vigenciaInicio && person.vigenciaFim 
+                  ? `${person.vigenciaInicio} a ${person.vigenciaFim}`
+                  : person.vigenciaInicio || person.vigenciaFim || '-'}
+              </TableCell>
               <TableCell>
                 <div className="flex flex-col gap-1" onClick={(e) => e.stopPropagation()}>
                   <a
