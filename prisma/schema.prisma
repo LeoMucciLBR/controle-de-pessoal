@@ -44,8 +44,10 @@ model Person {
   
   // Empresa e Contrato
   empresa                 String
-  contrato                String   @default("CONTRATO GLOBAL")
-  contratosAtivos         String[] // Array de contratos
+  contrato                String   @default("CONTRATO GLOBAL") // Contrato principal
+  contratosAtivos         String[] // DEPRECATED: Usar relation contratosDetalhados
+  contratosDetalhados     PersonContract[] // Relation to contracts
+  
   dataAdmissao            String?
   vigenciaInicio          String?
   vigenciaFim             String?
@@ -61,6 +63,8 @@ model Person {
   numeroRegistroConselho  String?
   certidaoQuitacaoPf      Boolean  @default(false)
   certidaoQuitacaoPj      Boolean  @default(false)
+  certidaoQuitacaoData    String?  // Data da certidão
+  certidaoQuitacaoStatus  String?  // vigente, vencido, na
   
   // Profissional
   curriculo               Boolean  @default(false)
@@ -69,7 +73,15 @@ model Person {
   
   // Áreas e Disciplinas
   areas                   String[] // Array: rodovia, ferrovia, etc.
-  disciplina              String   @default("PROJETO") // PROJETO ou OBRA
+  areasDetalhes           Json?    // { "rodovia": ["PROJETO"], "ferrovia": ["OBRA", "PROJETO"] }
+  
+  // Deprecated Global Flags (Keeping for safety until migration verified, or removing if clean break is ok. User seems ok with breaks (dev env))
+  // Removing them to avoid confusion, using Json as source of truth.
+  // disciplina              String   @default("PROJETO") 
+  // atuacaoProjeto          Boolean  @default(false)
+  // atuacaoObra             Boolean  @default(false)
+  // Actually, keeping 'disciplina' string might be useful for legacy query compat? No.
+  
   competencias            String[] // Array de competencias
   disciplinasProjeto      String[] // Array
   disciplinasObra         String[] // Array
@@ -77,6 +89,23 @@ model Person {
   createdAt               DateTime @default(now())
   updatedAt               DateTime @updatedAt
 }
+
+// ============================================
+// CONTRATOS DETALHADOS (Eixo 1, Entrevias, etc.)
+// ============================================
+model PersonContract {
+  id        Int      @id @default(autoincrement())
+  tipo      String   // EIXO 1, ENTREVIAS, ECOPISTAS, ECORIOMINAS, CONTRATO GLOBAL
+  nome      String   // Ex: CT. 0075/23 OS - 026
+  data      String   // Ex: 24/11/2023
+  
+  personId  Int
+  person    Person   @relation(fields: [personId], references: [id], onDelete: Cascade)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 
 // ============================================
 // CONFIGURAÇÕES (Dropdowns)

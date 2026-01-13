@@ -18,13 +18,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import {
   Eye,
+  MoreHorizontal,
   Pencil,
   Trash2,
-  Copy,
-  MoreHorizontal,
-  ArrowUpDown,
   Mail,
   Phone,
+  CheckCircle2,
+  AlertCircle,
+  Clock,
+  Copy,
+  ArrowUpDown
 } from 'lucide-react';
 import { Person } from '@/types/person';
 import { StatusBadge } from './StatusBadge';
@@ -159,6 +162,7 @@ export function PersonTable({
               <SortableHeader field="dataAdmissao">Admissão</SortableHeader>
             </TableHead>
             <TableHead>Vigência</TableHead>
+            <TableHead>Status Vigência</TableHead>
             <TableHead>Contato</TableHead>
             <TableHead className="w-12"></TableHead>
           </TableRow>
@@ -209,6 +213,46 @@ export function PersonTable({
                 {person.vigenciaInicio && person.vigenciaFim 
                   ? `${person.vigenciaInicio} a ${person.vigenciaFim}`
                   : person.vigenciaInicio || person.vigenciaFim || '-'}
+              </TableCell>
+              <TableCell>
+                {(() => {
+                  if (!person.vigenciaFim) return <span className="text-muted-foreground">-</span>;
+                  
+                  const today = new Date();
+                  today.setHours(0,0,0,0);
+                  
+                  // Parse vigenciaFim (YYYY-MM-DD)
+                  // Handle potential DD/MM/YYYY format if legacy data exists, though standard is YYYY-MM-DD
+                  let year, month, day;
+                  if (person.vigenciaFim.includes('/')) {
+                     [day, month, year] = person.vigenciaFim.split('/').map(Number);
+                  } else {
+                     [year, month, day] = person.vigenciaFim.split('-').map(Number);
+                  }
+                  
+                  const endDate = new Date(year, month - 1, day);
+                  
+                  let status = 'Vigente';
+                  let colorClass = 'text-emerald-400 bg-emerald-400/10 border-emerald-400/20';
+                  let Icon = CheckCircle2;
+                  
+                  if (endDate < today) {
+                    status = 'Vencido';
+                    colorClass = 'text-red-400 bg-red-400/10 border-red-400/20';
+                    Icon = AlertCircle;
+                  } else if (endDate.getMonth() === today.getMonth() && endDate.getFullYear() === today.getFullYear()) {
+                    status = 'A Vencer';
+                    colorClass = 'text-orange-400 bg-orange-400/10 border-orange-400/20';
+                    Icon = Clock;
+                  }
+                  
+                  return (
+                    <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full border w-fit ${colorClass}`}>
+                      <Icon className="w-3 h-3" />
+                      <span className="text-xs font-medium">{status}</span>
+                    </div>
+                  );
+                })()}
               </TableCell>
               <TableCell>
                 <div className="flex flex-col gap-1" onClick={(e) => e.stopPropagation()}>

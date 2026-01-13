@@ -10,6 +10,8 @@ import { Person, AreaAtuacao } from '@/types/person';
 import { StatusBadge } from './StatusBadge';
 import { Mail, Phone, Building2, FileText, Calendar, Briefcase, UserCircle, Check, X } from 'lucide-react';
 import { areasAtuacao } from '@/lib/mock-data';
+import { useSettings } from '@/contexts/SettingsContext';
+import { ContractColumn } from './ContractColumn';
 
 interface PersonDetailModalProps {
   person: Person | null;
@@ -18,6 +20,8 @@ interface PersonDetailModalProps {
 }
 
 export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailModalProps) {
+  const { contratos } = useSettings();
+  
   if (!person) return null;
 
   const getAreaLabel = (value: string) => {
@@ -48,7 +52,28 @@ export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailMo
           <div className="flex flex-wrap items-center gap-4 justify-between bg-muted/30 p-4 rounded-lg border">
             <div className="flex items-center gap-3">
               <StatusBadge status={person.status} />
-              <Badge variant="outline">{person.disciplina}</Badge>
+              
+              <div className="flex flex-wrap gap-2">
+                  {(person.areas || []).map(area => {
+                      const areaLabel = areasAtuacao.find(a => a.value === area)?.label || area;
+                      const detalhes = (person.areasDetalhes as Record<string, any>)?.[area] || []; 
+                      
+                      return (
+                          <div key={area} className="flex items-center gap-2 pl-2 pr-1 py-1 rounded-md bg-white/5 border border-white/10">
+                              <span className="text-xs font-semibold uppercase text-muted-foreground">{areaLabel}</span>
+                              <div className="flex gap-1">
+                                  {Array.isArray(detalhes) && detalhes.includes('PROJETO') && (
+                                      <Badge variant="outline" className="text-[9px] h-5 px-1.5 bg-blue-500/10 text-blue-400 border-blue-500/20">Proj</Badge>
+                                  )}
+                                  {Array.isArray(detalhes) && detalhes.includes('OBRA') && (
+                                      <Badge variant="outline" className="text-[9px] h-5 px-1.5 bg-orange-500/10 text-orange-400 border-orange-500/20">Obra</Badge>
+                                  )}
+                              </div>
+                          </div>
+                      );
+                  })}
+              </div>
+
               {person.formacao && <span className="text-sm font-medium text-muted-foreground ml-2">{person.formacao}</span>}
             </div>
             {person.curriculo && (
@@ -76,20 +101,51 @@ export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailMo
           <Separator />
 
           {/* Dados Corporativos */}
+          {/* Dados Corporativos */}
           <section>
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
                <Building2 className="h-5 w-5 text-primary" /> Dados da Empresa
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                <InfoItem label="Empresa" value={person.empresa} />
-               <InfoItem label="Contrato Principal" value={person.contrato} />
                <InfoItem label="Admissão" value={person.dataAdmissao ? new Date(person.dataAdmissao).toLocaleDateString('pt-BR') : '-'} />
+               <InfoItem label="Cargo" value={person.cargo} />
+               
                <InfoItem label="Vigência Início" value={person.vigenciaInicio ? new Date(person.vigenciaInicio).toLocaleDateString('pt-BR') : '-'} />
                <InfoItem label="Vigência Fim" value={person.vigenciaFim ? new Date(person.vigenciaFim).toLocaleDateString('pt-BR') : '-'} />
-               <div className="md:col-span-3">
-                  <p className="text-xs text-muted-foreground mb-1">Contratos Ativos</p>
-                  <div className="flex flex-wrap gap-2">
-                     {person.contratosAtivos?.map(c => <Badge key={c} variant="secondary">{c}</Badge>) || <span className="text-sm">-</span>}
+               
+               <div className="col-span-full mt-2">
+                  <Separator className="mb-4" />
+                  <p className="text-xs text-muted-foreground mb-3 uppercase tracking-wider font-semibold flex items-center gap-2">
+                    <FileText className="w-3.5 h-3.5" />
+                    Contratos Detalhados
+                  </p>
+                  <div className="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x custom-scrollbar">
+                      {(() => {
+                        // Fallback logic specific for display:
+                        // If contratosAtivos is present, use it.
+                        // If not, infer from contratosDetalhados presence.
+                        let activeTypes = person.contratosAtivos || [];
+                        if (activeTypes.length === 0 && person.contratosDetalhados && person.contratosDetalhados.length > 0) {
+                             activeTypes = Array.from(new Set(person.contratosDetalhados.map(c => c.tipo)));
+                        }
+
+                        // If still empty (no active and no detailed), maybe show nothing or message?
+                        // Showing nothing as per user request ("so deve aparecer os ativos")
+                        
+                        return contratos
+                            .filter(tipo => activeTypes.includes(tipo))
+                            .map((tipo) => (
+                              <div key={tipo} className="snap-start shrink-0">
+                                  <ContractColumn 
+                                      type={tipo}
+                                      contracts={(person.contratosDetalhados || []).filter(c => c.tipo === tipo)}
+                                      readOnly
+                                      color="bg-purple-500"
+                                  />
+                              </div>
+                          ));
+                      })()}
                   </div>
                </div>
             </div>
@@ -114,6 +170,34 @@ export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailMo
                <InfoItem label="Ano Registro" value={person.anoRegistroConselho?.toString()} />
                <InfoBoolean label="Certidão Quitação PF" value={person.certidaoQuitacaoPf} />
                <InfoBoolean label="Certidão Quitação PJ" value={person.certidaoQuitacaoPj} />
+               
+               {(person.certidaoQuitacaoPf || person.certidaoQuitacaoPj) && (
+                <div className="col-span-full mt-2 p-3 rounded-lg border border-blue-500/20 bg-blue-500/10">
+                    <p className="text-xs font-semibold text-blue-400 mb-2 uppercase tracking-wider flex items-center gap-2">
+                       <FileText className="w-3 h-3" /> Detalhes Certidão
+                    </p>
+                    <div className="flex items-center gap-6">
+                        <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground block">Data de Emissão</span>
+                            <span className="text-sm font-medium">
+                                {person.certidaoQuitacaoData ? new Date(person.certidaoQuitacaoData).toLocaleDateString('pt-BR', { timeZone: 'UTC' }) : '-'}
+                            </span>
+                        </div>
+                         <div className="space-y-1">
+                            <span className="text-xs text-muted-foreground block">Status</span>
+                            {person.certidaoQuitacaoStatus === 'vigente' && (
+                                 <Badge className="bg-green-500/20 text-green-400 hover:bg-green-500/30 border-green-500/50">Vigente</Badge>
+                            )}
+                            {person.certidaoQuitacaoStatus === 'vencido' && (
+                                 <Badge className="bg-red-500/20 text-red-400 hover:bg-red-500/30 border-red-500/50">Vencido</Badge>
+                            )}
+                            {(person.certidaoQuitacaoStatus === 'na' || (!person.certidaoQuitacaoStatus && person.certidaoQuitacaoStatus !== 'vigente' && person.certidaoQuitacaoStatus !== 'vencido')) && (
+                                 <span className="text-sm text-muted-foreground uppercase">{person.certidaoQuitacaoStatus === 'na' ? 'Não Aplicável' : '-'}</span>
+                            )}
+                        </div>
+                    </div>
+                </div>
+               )}
             </div>
           </section>
 
@@ -150,7 +234,7 @@ export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailMo
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Áreas de Atuação</p>
                     <div className="flex flex-wrap gap-2">
                     {person.areas.map((area) => (
-                        <Badge key={area} className="bg-primary/20 text-primary hover:bg-primary/30 border-transparent">
+                        <Badge key={area} className="bg-primary/20 text-white hover:bg-primary/30 border-transparent">
                         {getAreaLabel(area)}
                         </Badge>
                     ))}

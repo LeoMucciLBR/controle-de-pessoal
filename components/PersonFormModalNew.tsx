@@ -1,5 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Person, PersonStatus, Contrato, Disciplina, AreaAtuacao } from '@/types/person';
+import { Person, PersonStatus, Contrato, Disciplina, AreaAtuacao, PersonContractType } from '@/types/person';
+import { ContractColumn } from './ContractColumn';
+import { ContractFormDialog } from './ContractFormDialog';
 import {
   Dialog,
   DialogContent,
@@ -122,9 +124,64 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
   const [showExitConfirm, setShowExitConfirm] = useState(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
+  // Contract Management State
+  const [contractDialogOpen, setContractDialogOpen] = useState(false);
+  const [contractTypeToAdd, setContractTypeToAdd] = useState('');
+  const [contractToEdit, setContractToEdit] = useState<PersonContractType | null>(null);
+
+  const handleAddContract = (type: string) => {
+    setContractTypeToAdd(type);
+    setContractToEdit(null);
+    setContractDialogOpen(true);
+  };
+
+  const handleEditContract = (contract: PersonContractType) => {
+    setContractTypeToAdd(contract.tipo);
+    setContractToEdit(contract);
+    setContractDialogOpen(true);
+  };
+
+  const handleSaveContract = (contract: PersonContractType) => {
+    setFormData(prev => {
+        const current = prev.contratosDetalhados || [];
+        let updated;
+
+        if (contractToEdit) {
+            // Edit existing
+            updated = current.map(c => {
+                 if (contractToEdit.id && c.id === contractToEdit.id) return { ...contract, id: c.id };
+                 if ((c as any)._tempId && (c as any)._tempId === (contractToEdit as any)._tempId) return { ...contract, _tempId: (c as any)._tempId };
+                 return c;
+            });
+        } else {
+            // Add new
+            updated = [...current, { ...contract, _tempId: Date.now() }];
+        }
+        return { ...prev, contratosDetalhados: updated };
+    });
+    setHasUnsavedChanges(true);
+  };
+
+  const handleDeleteContract = (contract: PersonContractType) => {
+     setFormData(prev => ({
+         ...prev,
+         contratosDetalhados: (prev.contratosDetalhados || []).filter(c => {
+             if (contract.id) return c.id !== contract.id;
+             return (c as any)._tempId !== (contract as any)._tempId;
+         })
+     }));
+     setHasUnsavedChanges(true);
+  };
+
   useEffect(() => {
     if (person) {
-      setFormData({ ...person });
+      // Ensure contratosAtivos reflects detailed contracts if missing (migration/fallback logic)
+      let initialContratosAtivos = person.contratosAtivos || [];
+      if (initialContratosAtivos.length === 0 && person.contratosDetalhados && person.contratosDetalhados.length > 0) {
+           initialContratosAtivos = Array.from(new Set(person.contratosDetalhados.map(c => c.tipo)));
+      }
+      
+      setFormData({ ...person, contratosAtivos: initialContratosAtivos });
     } else {
       setFormData({ ...emptyPerson });
       setActiveTab("personal");
@@ -461,9 +518,6 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                       </motion.div>
                                       
                                       <motion.div variants={staggerItem} className="col-span-12 md:col-span-6">
-                                          <ModernSelect label="Contrato Principal" value={formData.contrato} onChange={(v) => handleChange('contrato', v)} options={contratos} icon={FileText} />
-                                      </motion.div>
-                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-6">
                                           <ModernInput 
                                             label="Formação Acadêmica" 
                                             value={formData.formacao || ''} 
@@ -471,6 +525,58 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                             icon={GraduationCap}
                                             placeholder="Ex: Engenharia Civil"
                                           />
+                                      </motion.div>
+
+                                      {/* Contratos Ativos Selection - MOVED UP */}
+                                      <motion.div variants={staggerItem} className="col-span-12 mt-4">
+                                          <Label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Selecione os Contratos Ativos</Label>
+                                          <div className="flex flex-wrap gap-2">
+                                              {contratos.map(c => (
+                                                  <ModernChip 
+                                                      key={c} 
+                                                      label={c} 
+                                                      selected={formData.contratosAtivos?.includes(c) || false} 
+                                                      onClick={() => handleMultiSelect('contratosAtivos', c, !formData.contratosAtivos?.includes(c))} 
+                                                  />
+                                              ))}
+                                          </div>
+                                      </motion.div>
+
+                                      {/* Contratos Detalhados Section */}
+                                      <motion.div variants={staggerItem} className="col-span-12 mt-4">
+                                          {(!formData.contratosAtivos || formData.contratosAtivos.length === 0) ? (
+                                             <div className="text-center p-6 border border-dashed border-white/10 rounded-xl bg-white/5">
+                                                 <p className="text-sm text-muted-foreground">Selecione um ou mais contratos ativos acima para gerenciar os detalhes.</p>
+                                             </div>
+                                          ) : (
+                                              <>
+                                                  <div className="flex items-center gap-2 mb-3 mt-2">
+                                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                                                    <span className="text-xs text-muted-foreground uppercase tracking-wider flex items-center gap-2">
+                                                        <FileText className="w-3 h-3" />
+                                                        Detalhes dos Contratos
+                                                    </span>
+                                                    <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                                                  </div>
+                                                  
+                                                  <div className="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x custom-scrollbar">
+                                                      {contratos
+                                                        .filter(tipo => formData.contratosAtivos?.includes(tipo))
+                                                        .map((tipo) => (
+                                                          <div key={tipo} className="snap-start shrink-0">
+                                                              <ContractColumn 
+                                                                  type={tipo}
+                                                                  contracts={(formData.contratosDetalhados || []).filter(c => c.tipo === tipo)}
+                                                                  onAdd={handleAddContract}
+                                                                  onEdit={handleEditContract}
+                                                                  onDelete={handleDeleteContract}
+                                                                  color="bg-purple-500"
+                                                              />
+                                                          </div>
+                                                      ))}
+                                                  </div>
+                                              </>
+                                          )}
                                       </motion.div>
 
                                       <motion.div variants={staggerItem} className="col-span-12">
@@ -509,19 +615,7 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                           />
                                       </motion.div>
 
-                                      <motion.div variants={staggerItem} className="col-span-12 mt-2">
-                                          <Label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Contratos Ativos</Label>
-                                          <div className="flex flex-wrap gap-2">
-                                              {contratos.map(c => (
-                                                  <ModernChip 
-                                                      key={c} 
-                                                      label={c} 
-                                                      selected={formData.contratosAtivos?.includes(c) || false} 
-                                                      onClick={() => handleMultiSelect('contratosAtivos', c, !formData.contratosAtivos?.includes(c))} 
-                                                  />
-                                              ))}
-                                          </div>
-                                      </motion.div>
+
                                   </motion.div>
                               </motion.div>
                           )}
@@ -548,15 +642,71 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                             onChange={(v) => handleChange('status', v)} 
                                           />
                                       </motion.div>
-                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-6">
-                                          <ModernSelect 
-                                            label="Disciplina Principal" 
-                                            value={formData.disciplina} 
-                                            onChange={(v) => handleChange('disciplina', v)} 
-                                            options={['PROJETO', 'OBRA']} 
-                                            icon={LayoutGrid}
-                                          />
+                                      <motion.div variants={staggerItem} className="col-span-12">
+                                          <Label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Áreas de Atuação & Detalhes</Label>
+                                          <div className="flex flex-wrap gap-2 mb-4">
+                                              {areasList.map(area => (
+                                                  <ModernChip 
+                                                      key={area.value} 
+                                                      label={area.label} 
+                                                      selected={formData.areas?.includes(area.value as AreaAtuacao) || false} 
+                                                      onClick={() => handleMultiSelect('areas', area.value as AreaAtuacao, !formData.areas?.includes(area.value as AreaAtuacao))} 
+                                                  />
+                                              ))}
+                                          </div>
+
+                                          {/* Detalhamento por Área */}
+                                          {(formData.areas || []).length > 0 && (
+                                            <div className="space-y-3 mt-4">
+                                                <Label className="block text-xs font-medium text-muted-foreground mb-2">Definir Atuação por Área</Label>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                    {(formData.areas || []).map(area => {
+                                                        const areaLabel = areasList.find(a => a.value === area)?.label || area;
+                                                        const detalhes = (formData.areasDetalhes?.[area] || []) as string[];
+                                                        
+                                                        const toggleDetalhe = (tipo: string, checked: boolean) => {
+                                                            const newDetalhes = checked 
+                                                                ? [...detalhes, tipo]
+                                                                : detalhes.filter(t => t !== tipo);
+                                                            
+                                                            handleChange('areasDetalhes', {
+                                                                ...(formData.areasDetalhes || {}),
+                                                                [area]: newDetalhes
+                                                            });
+                                                        };
+
+                                                        return (
+                                                            <div key={area} className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-3">
+                                                                <span className="text-sm font-semibold text-white flex items-center gap-2">
+                                                                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                                                    {areaLabel}
+                                                                </span>
+                                                                <div className="flex gap-4">
+                                                                    <label className="flex items-center gap-2 cursor-pointer group">
+                                                                        <Checkbox 
+                                                                            checked={detalhes.includes('PROJETO')} 
+                                                                            onCheckedChange={(c) => toggleDetalhe('PROJETO', c as boolean)}
+                                                                            className="data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500 w-4 h-4"
+                                                                        />
+                                                                        <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">Projeto</span>
+                                                                    </label>
+                                                                    <label className="flex items-center gap-2 cursor-pointer group">
+                                                                        <Checkbox 
+                                                                            checked={detalhes.includes('OBRA')} 
+                                                                            onCheckedChange={(c) => toggleDetalhe('OBRA', c as boolean)}
+                                                                            className="data-[state=checked]:bg-orange-500 data-[state=checked]:border-orange-500 w-4 h-4"
+                                                                        />
+                                                                        <span className="text-xs font-medium text-muted-foreground group-hover:text-foreground transition-colors">Obra</span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                          )}
                                       </motion.div>
+                                      
                                       <motion.div variants={staggerItem} className="col-span-12">
                                           <ModernInput 
                                             label="Resumo Profissional" 
@@ -567,39 +717,30 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                           />
                                       </motion.div>
 
-                                      <motion.div variants={staggerItem} className="col-span-12">
-                                          <Label className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">Áreas de Atuação</Label>
-                                          <div className="flex flex-wrap gap-2">
-                                              {areasList.map(area => (
-                                                  <ModernChip 
-                                                      key={area.value} 
-                                                      label={area.label} 
-                                                      selected={formData.areas?.includes(area.value as AreaAtuacao) || false} 
-                                                      onClick={() => handleMultiSelect('areas', area.value as AreaAtuacao, !formData.areas?.includes(area.value as AreaAtuacao))} 
-                                                  />
-                                              ))}
-                                          </div>
-                                      </motion.div>
+                                      {/* Logic for showing Discipline Cards: Check if ANY area has PROJETO or OBRA selected */}
+                                      {Object.values(formData.areasDetalhes || {}).some((d: any) => d.includes('PROJETO')) && (
+                                          <motion.div variants={staggerItem} className="col-span-12 md:col-span-6" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+                                              <DisciplineCard 
+                                                title="Disciplinas de Projeto"
+                                                items={disciplinasProjeto}
+                                                selectedItems={formData.disciplinasProjeto || []}
+                                                onToggle={(d, checked) => handleMultiSelect('disciplinasProjeto', d, checked)}
+                                                color="from-blue-500 to-cyan-500"
+                                              />
+                                          </motion.div>
+                                      )}
 
-                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-6">
-                                          <DisciplineCard 
-                                            title="Disciplinas de Projeto"
-                                            items={disciplinasProjeto}
-                                            selectedItems={formData.disciplinasProjeto || []}
-                                            onToggle={(d, checked) => handleMultiSelect('disciplinasProjeto', d, checked)}
-                                            color="from-blue-500 to-cyan-500"
-                                          />
-                                      </motion.div>
-
-                                      <motion.div variants={staggerItem} className="col-span-12 md:col-span-6">
-                                          <DisciplineCard 
-                                            title="Disciplinas de Obra"
-                                            items={disciplinasObra}
-                                            selectedItems={formData.disciplinasObra || []}
-                                            onToggle={(d, checked) => handleMultiSelect('disciplinasObra', d, checked)}
-                                            color="from-orange-500 to-red-500"
-                                          />
-                                      </motion.div>
+                                      {Object.values(formData.areasDetalhes || {}).some((d: any) => d.includes('OBRA')) && (
+                                          <motion.div variants={staggerItem} className="col-span-12 md:col-span-6" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }}>
+                                              <DisciplineCard 
+                                                title="Disciplinas de Obra"
+                                                items={disciplinasObra}
+                                                selectedItems={formData.disciplinasObra || []}
+                                                onToggle={(d, checked) => handleMultiSelect('disciplinasObra', d, checked)}
+                                                color="from-orange-500 to-red-500"
+                                              />
+                                          </motion.div>
+                                      )}
 
                                       {/* Treinamentos Section */}
                                       <motion.div variants={staggerItem} className="col-span-12">
@@ -755,6 +896,55 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                                 checked={formData.certidaoQuitacaoPj} 
                                                 onChange={c => handleCheckboxChange('certidaoQuitacaoPj', c)} 
                                               />
+                                              
+                                              {/* Detalhes da Certidão */}
+                                              {(formData.certidaoQuitacaoPf || formData.certidaoQuitacaoPj) && (
+                                                <motion.div 
+                                                  initial={{ opacity: 0, height: 0 }} 
+                                                  animate={{ opacity: 1, height: 'auto' }} 
+                                                  className="pt-2 overflow-hidden"
+                                                >
+                                                    <div className="grid grid-cols-2 gap-3 p-3 bg-white/5 rounded-xl border border-white/5 bg-blue-900/10 border-blue-500/10">
+                                                        <div className="col-span-2 mb-1">
+                                                            <Label className="text-[10px] font-bold uppercase tracking-wider text-blue-400 flex items-center gap-2">
+                                                                <FileText className="w-3 h-3" />
+                                                                Detalhes da Certidão (CRQ/CAU/CFT)
+                                                            </Label>
+                                                        </div>
+                                                        <ModernInput 
+                                                            label="Data de Emissão"
+                                                            type="date"
+                                                            value={formData.certidaoQuitacaoData || ''}
+                                                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange('certidaoQuitacaoData', e.target.value)}
+                                                            icon={Calendar}
+                                                        />
+                                                        <div className="group space-y-2">
+                                                            <Label className="text-xs font-medium text-muted-foreground group-focus-within:text-primary transition-colors ml-0.5 uppercase tracking-wider flex items-center gap-2">
+                                                              <Check className="w-3 h-3" />
+                                                              Status
+                                                            </Label>
+                                                            <Select value={formData.certidaoQuitacaoStatus} onValueChange={(v) => handleChange('certidaoQuitacaoStatus', v)}>
+                                                                <SelectTrigger className="h-11 rounded-xl border-white/10 bg-white/5 hover:bg-white/[0.07] focus:bg-white/10 transition-all focus:ring-0 focus:border-primary/50 shadow-sm">
+                                                                    <SelectValue placeholder="Selecione..." />
+                                                                </SelectTrigger>
+                                                                <SelectContent className="bg-background border border-white/10 rounded-xl shadow-xl backdrop-blur-xl">
+                                                                    <SelectItem value="vigente" className="focus:bg-primary/10 cursor-pointer rounded-lg mx-1 my-0.5">
+                                                                      <span className="flex items-center gap-2">
+                                                                        <span className="w-1.5 h-1.5 rounded-full bg-green-500"/> Vigente
+                                                                      </span>
+                                                                    </SelectItem>
+                                                                    <SelectItem value="vencido" className="focus:bg-primary/10 cursor-pointer rounded-lg mx-1 my-0.5">
+                                                                      <span className="flex items-center gap-2">
+                                                                        <span className="w-1.5 h-1.5 rounded-full bg-red-500"/> Vencido
+                                                                      </span>
+                                                                    </SelectItem>
+                                                                    <SelectItem value="na" className="focus:bg-primary/10 cursor-pointer rounded-lg mx-1 my-0.5">N/A</SelectItem>
+                                                                </SelectContent>
+                                                            </Select>
+                                                        </div>
+                                                    </div>
+                                                </motion.div>
+                                              )}
                                           </div>
                                         </DocumentCard>
                                       </motion.div>
@@ -819,6 +1009,14 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
+
+    <ContractFormDialog 
+        open={contractDialogOpen}
+        onOpenChange={setContractDialogOpen}
+        onSave={handleSaveContract}
+        contractToEdit={contractToEdit}
+        type={contractTypeToAdd}
+    />
     </>
   );
 }

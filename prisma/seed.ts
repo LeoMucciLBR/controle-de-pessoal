@@ -46,11 +46,11 @@ async function main() {
   ];
 
   const contratos = [
-    'CONTRATO GLOBAL',
-    'CTR-2024/001 - Modernização',
-    'CTR-2024/002 - Manutenção',
-    'CTR-2023/150 - Expansão Norte',
-    'CTR-2023/189 - Consultoria Técnica',
+    "EIXO 1",
+    "ENTREVIAS",
+    "ECOPISTAS",
+    "ECORIOMINAS",
+    "CONTRATO GLOBAL"
   ];
 
   const disciplinasProjeto = [

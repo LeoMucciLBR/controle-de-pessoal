@@ -3,6 +3,14 @@ export type AreaAtuacao = 'rodovia' | 'ferrovia' | 'saneamento' | 'iluminacao_pu
 export type Contrato = 'EIXO 1' | 'ENTREVIAS' | 'ECOPISTAS' | 'ECORIOMINAS' | 'CONTRATO GLOBAL';
 export type Disciplina = 'PROJETO' | 'OBRA';
 
+export interface PersonContractType {
+  id?: number;
+  tipo: string; // EIXO 1, ENTREVIAS, etc.
+  nome: string; // CT. 0075/23...
+  data: string; // 24/11/2023
+  personId?: number;
+}
+
 export interface Person {
   id: number;
   nome: string;
@@ -21,8 +29,10 @@ export interface Person {
   
   // Empresa e Contrato
   empresa: string;
-  contrato: Contrato; // Contrato atual/principal
-  contratosAtivos?: string[]; // Checkbox dos contratos (EIXO 1, ENTREVIAS, etc)
+  contrato: Contrato; // Contrato principal
+  contratosAtivos?: string[]; // Deprecated, keeping for compatibility
+  contratosDetalhados?: PersonContractType[]; // New detailed contracts
+
   dataAdmissao?: string;
   vigenciaInicio?: string;
   vigenciaFim?: string;
@@ -38,6 +48,8 @@ export interface Person {
   numeroRegistroConselho?: string;
   certidaoQuitacaoPf?: boolean; // "CERTIDÃO DE REGISTRO E QUITAÇÃO DE PESSOA FÍSICA..."
   certidaoQuitacaoPj?: boolean; // "CERTIDÃO DE REGISTRO DE QUITAÇÃO (CRQ/CAU/CFT)"
+  certidaoQuitacaoData?: string;
+  certidaoQuitacaoStatus?: string;
 
   // Profissional
   curriculo?: boolean; // Tem currículo?
@@ -46,9 +58,12 @@ export interface Person {
 
   // Áreas (Flags gerais)
   areas: AreaAtuacao[]; // RODOVIA, FERROVIA, SANEAMENTO, ILUMINAÇÃO, EDIFICAÇÃO
+  areasDetalhes?: Record<string, string[]>;
 
   // Disciplinas Detalhadas
   disciplina: Disciplina; // Tipo principal (PROJETO ou OBRA)
+  atuacaoProjeto?: boolean;
+  atuacaoObra?: boolean;
   competencias: string[]; // Manter como tags genéricas ou migrar para as específicas abaixo
   
   disciplinasProjeto?: string[]; // AR CONDICIONADO, ARQUITETURA, AUTOMAÇÃO, BIM, etc.

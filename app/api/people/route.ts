@@ -28,6 +28,16 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    const contratosCreate = body.contratosDetalhados ? {
+      contratosDetalhados: {
+        create: body.contratosDetalhados.map((c: any) => ({
+          tipo: c.tipo,
+          nome: c.nome,
+          data: c.data
+        }))
+      }
+    } : {};
+
     const person = await prisma.person.create({
       data: {
         nome: body.nome,
@@ -57,12 +67,15 @@ export async function POST(request: NextRequest) {
         curriculo: body.curriculo || false,
         historicoProfissional: body.historicoProfissional || null,
         treinamentos: body.treinamentos || [],
+        // ... outros campos anteriores ...
         areas: body.areas || [],
         disciplina: body.disciplina || 'PROJETO',
         competencias: body.competencias || [],
         disciplinasProjeto: body.disciplinasProjeto || [],
         disciplinasObra: body.disciplinasObra || [],
+        ...contratosCreate
       },
+      include: { contratosDetalhados: true }
     });
 
     return NextResponse.json(person, { status: 201 });

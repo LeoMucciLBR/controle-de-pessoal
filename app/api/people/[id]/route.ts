@@ -10,6 +10,7 @@ export async function GET(
     const { id } = await params;
     const person = await prisma.person.findUnique({
       where: { id: parseInt(id) },
+      include: { contratosDetalhados: true },
     });
 
     if (!person) {
@@ -31,6 +32,18 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
+
+    // Prepare contracts update if present
+    const contratosUpdate = body.contratosDetalhados ? {
+      contratosDetalhados: {
+        deleteMany: {}, // Clear existing
+        create: body.contratosDetalhados.map((c: any) => ({
+          tipo: c.tipo,
+          nome: c.nome,
+          data: c.data
+        }))
+      }
+    } : {};
 
     const person = await prisma.person.update({
       where: { id: parseInt(id) },
@@ -67,7 +80,9 @@ export async function PUT(
         competencias: body.competencias || [],
         disciplinasProjeto: body.disciplinasProjeto || [],
         disciplinasObra: body.disciplinasObra || [],
+        ...contratosUpdate
       },
+      include: { contratosDetalhados: true }
     });
 
     return NextResponse.json(person);
