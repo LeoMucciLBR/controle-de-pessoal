@@ -75,12 +75,10 @@ model Person {
   areas                   String[] // Array: rodovia, ferrovia, etc.
   areasDetalhes           Json?    // { "rodovia": ["PROJETO"], "ferrovia": ["OBRA", "PROJETO"] }
   
-  // Deprecated Global Flags (Keeping for safety until migration verified, or removing if clean break is ok. User seems ok with breaks (dev env))
-  // Removing them to avoid confusion, using Json as source of truth.
-  // disciplina              String   @default("PROJETO") 
-  // atuacaoProjeto          Boolean  @default(false)
-  // atuacaoObra             Boolean  @default(false)
-  // Actually, keeping 'disciplina' string might be useful for legacy query compat? No.
+  // Deprecated Global Flags (Mantendo para histórico)
+  disciplina              String   @default("PROJETO")
+  atuacaoProjeto          Boolean  @default(false)
+  atuacaoObra             Boolean  @default(false)
   
   competencias            String[] // Array de competencias
   disciplinasProjeto      String[] // Array

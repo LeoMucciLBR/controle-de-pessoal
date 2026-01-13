@@ -207,7 +207,20 @@ export function PersonTable({
                 <StatusBadge status={person.status} />
               </TableCell>
               <TableCell className="text-sm">{person.empresa}</TableCell>
-              <TableCell className="text-sm">{person.contrato}</TableCell>
+              <TableCell className="text-sm">
+                {person.contratosDetalhados && person.contratosDetalhados.length > 0 ? (
+                  <div className="flex flex-col gap-1 items-start">
+                    {person.contratosDetalhados.map((c, i) => (
+                      <div key={i} className="inline-flex flex-col rounded-md bg-muted px-2 py-1 text-xs font-medium ring-1 ring-inset ring-gray-500/10">
+                         <span className="font-semibold text-primary/80">{c.tipo}</span>
+                         <span className="text-muted-foreground">{c.nome}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  person.contrato || '-'
+                )}
+              </TableCell>
               <TableCell className="text-sm text-muted-foreground">{person.dataAdmissao || '-'}</TableCell>
               <TableCell className="text-xs text-muted-foreground">
                 {person.vigenciaInicio && person.vigenciaFim 

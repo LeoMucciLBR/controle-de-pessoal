@@ -92,8 +92,10 @@ export function PersonDetailModal({ person, open, onOpenChange }: PersonDetailMo
                <InfoItem label="CPF" value={person.cpf} />
                <InfoItem label="RG" value={person.rg} />
                <InfoItem label="Data de Nascimento" value={person.dataNascimento ? new Date(person.dataNascimento).toLocaleDateString('pt-BR') : '-'} />
-               <InfoItem label="Email" value={person.email} isLink href={`mailto:${person.email}`} icon={<Mail className="h-3 w-3" />} />
+               
+               <InfoItem label="Email" value={person.email} isLink href={`mailto:${person.email}`} icon={<Mail className="h-3 w-3" />} className="md:col-span-2" />
                <InfoItem label="Telefone" value={person.telefone} isLink href={`tel:${person.telefone}`} icon={<Phone className="h-3 w-3" />} />
+               
                <InfoItem label="Endereço" value={person.endereco} className="md:col-span-3" />
             </div>
           </section>

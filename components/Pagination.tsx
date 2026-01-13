@@ -30,10 +30,14 @@ export function Pagination({
   onPageChange,
   onPageSizeChange,
 }: PaginationProps) {
+  const start = (currentPage - 1) * pageSize + 1;
+  const end = Math.min(currentPage * pageSize, totalItems);
+
   return (
     <div className="flex flex-col items-center justify-between gap-4 px-2 py-4 sm:flex-row">
       <div className="text-sm text-muted-foreground">
-        Mostrando <span className="font-medium">{Math.min(pageSize, totalItems)}</span> de{' '}
+        Mostrando <span className="font-medium">{totalItems > 0 ? start : 0}</span>-
+        <span className="font-medium">{end}</span> de{' '}
         <span className="font-medium">{totalItems}</span> resultados
       </div>
 
@@ -41,8 +45,11 @@ export function Pagination({
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Linhas por página</p>
           <Select
-            value={`${pageSize}`}
-            onValueChange={(value) => onPageSizeChange(Number(value))}
+            value={String(pageSize)}
+            onValueChange={(value) => {
+              console.log('Pagination: Mudando tamanho para', value);
+              onPageSizeChange(Number(value));
+            }}
           >
             <SelectTrigger className="h-8 w-[70px]">
               <SelectValue placeholder={pageSize} />
