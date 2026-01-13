@@ -117,10 +117,6 @@ export function PersonCardGrid({
                       <Pencil className="mr-2 h-4 w-4" />
                       Editar
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => onDuplicate(person)}>
-                      <Copy className="mr-2 h-4 w-4" />
-                      Duplicar
-                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={() => onDelete(person)}

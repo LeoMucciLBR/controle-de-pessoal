@@ -71,8 +71,8 @@ export function FilterPanel({
             <SelectItem value="all">Todos os Status</SelectItem>
             <SelectItem value="ativo">Ativo</SelectItem>
             <SelectItem value="inativo">Inativo</SelectItem>
-            <SelectItem value="banco_de_dados">Banco de Dados</SelectItem>
-            <SelectItem value="baixa_frequencia">Baixa Frequência</SelectItem>
+            <SelectItem value="banco de dados">Banco de Dados</SelectItem>
+            <SelectItem value="baixa frequencia">Baixa Frequência</SelectItem>
           </SelectContent>
         </Select>
 

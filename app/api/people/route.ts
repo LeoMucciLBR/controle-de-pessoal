@@ -1,10 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// GET - Buscar todas as pessoas
+// GET - Buscar todas as pessoas (exceto apagadas)
 export async function GET() {
   try {
     const people = await prisma.person.findMany({
+      where: {
+        // Exclui registros com status 'apagado' (soft delete)
+        NOT: { status: 'apagado' }
+      },
       orderBy: { nome: 'asc' },
     });
 

@@ -16,7 +16,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -39,17 +39,27 @@ export function AppTopbar() {
   const { user, logout } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  // Evita erro de hydration esperando montagem no cliente
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogout = async () => {
     await logout();
     router.push('/login');
   };
 
-  const userInitials = user?.name
+  // Usa valores padrão até que o componente esteja montado para evitar hydration mismatch
+  const userInitials = mounted && user?.name
     ? user.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
-    : 'US';
+    : '';
 
-  const avatarUrl = user?.name
+  const userName = mounted ? (user?.name || 'Usuário') : 'Usuário';
+  const userEmail = mounted ? (user?.email || '') : '';
+
+  const avatarUrl = mounted && user?.name
     ? `https://ui-avatars.com/api/?name=${encodeURIComponent(user.name)}&background=2f4982&color=fff`
     : 'https://ui-avatars.com/api/?name=User&background=2f4982&color=fff';
 
@@ -128,8 +138,8 @@ export function AppTopbar() {
                   <DropdownMenuContent align="end" className="w-56" forceMount>
                      <div className="flex items-center justify-start gap-2 p-2">
                         <div className="flex flex-col space-y-1 leading-none">
-                           <p className="font-medium">{user?.name || 'Usuário'}</p>
-                           <p className="w-[200px] truncate text-sm text-muted-foreground">{user?.email || ''}</p>
+                           <p className="font-medium">{userName}</p>
+                           <p className="w-[200px] truncate text-sm text-muted-foreground">{userEmail}</p>
                         </div>
                      </div>
                      <DropdownMenuItem onClick={handleLogout} className="text-destructive focus:text-destructive cursor-pointer">
@@ -198,13 +208,13 @@ export function AppTopbar() {
                 
                 <div className="border-t border-border my-2 pt-2">
                    <div className="flex items-center gap-3 px-3 py-3 rounded-md">
-                      <Avatar className="h-8 w-8">
+                       <Avatar className="h-8 w-8">
                           <AvatarImage src={avatarUrl} />
                           <AvatarFallback>{userInitials}</AvatarFallback>
                        </Avatar>
                        <div>
-                          <p className="text-sm font-medium">{user?.name || 'Usuário'}</p>
-                          <p className="text-xs text-muted-foreground">{user?.email || ''}</p>
+                          <p className="text-sm font-medium">{userName}</p>
+                          <p className="text-xs text-muted-foreground">{userEmail}</p>
                        </div>
                    </div>
                    <Button onClick={handleLogout} variant="ghost" className="w-full justify-start text-destructive hover:text-destructive hover:bg-muted">

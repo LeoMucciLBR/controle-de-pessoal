@@ -1,7 +1,10 @@
 import { PersonStatus } from '@/types/person';
 import { cn } from '@/lib/utils';
 
-const statusConfig: Record<PersonStatus, { label: string; className: string }> = {
+// Mapeia valores do banco para configuração de exibição
+// Suporta múltiplos formatos: snake_case e com espaços
+const statusConfig: Record<string, { label: string; className: string }> = {
+  // Formato snake_case
   ativo: {
     label: 'Ativo',
     className: 'bg-green-500 text-white border-green-500'
@@ -17,6 +20,15 @@ const statusConfig: Record<PersonStatus, { label: string; className: string }> =
   baixa_frequencia: {
     label: 'Baixa Frequência',
     className: 'bg-yellow-500 text-white border-yellow-500'
+  },
+  // Formato com espaços (como está no banco de dados)
+  'banco de dados': {
+    label: 'Banco de Dados',
+    className: 'bg-blue-500 text-white border-blue-500'
+  },
+  'baixa frequencia': {
+    label: 'Baixa Frequência',
+    className: 'bg-yellow-500 text-white border-yellow-500'
   }
 };
 
@@ -26,12 +38,16 @@ const defaultConfig = {
 };
 
 interface StatusBadgeProps {
-  status?: PersonStatus | null;
+  status?: PersonStatus | string | null;
   className?: string;
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
-  const config = status && statusConfig[status] ? statusConfig[status] : defaultConfig;
+  // Normaliza o status para lowercase para comparação
+  const normalizedStatus = status?.toLowerCase().trim();
+  const config = normalizedStatus && statusConfig[normalizedStatus] 
+    ? statusConfig[normalizedStatus] 
+    : defaultConfig;
 
   return (
     <span

@@ -123,7 +123,7 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl h-[600px] p-0 gap-0 overflow-hidden border-0 bg-transparent shadow-none flex flex-col md:flex-row items-stretch">
+      <DialogContent className="max-w-5xl h-[600px] p-0 gap-0 overflow-hidden border-0 bg-transparent shadow-none flex flex-col md:flex-row items-stretch">
         <DialogTitle className="sr-only">
           Configurações do Sistema
         </DialogTitle>
@@ -135,7 +135,7 @@ export function SettingsModal({ open, onOpenChange }: SettingsModalProps) {
         <div className="flex flex-col md:flex-row w-full h-full rounded-2xl overflow-hidden border border-white/10 backdrop-blur-xl bg-gradient-to-b from-background/95 to-background shadow-2xl shadow-black/50">
           
           {/* Sidebar */}
-          <div className="w-full md:w-64 flex-shrink-0 border-b md:border-b-0 md:border-r border-white/10 bg-white/[0.02] flex flex-col min-h-[120px] md:min-h-[500px]">
+          <div className="w-full md:w-72 flex-shrink-0 border-b md:border-b-0 md:border-r border-white/10 bg-white/[0.02] flex flex-col min-h-[120px] md:min-h-[500px]">
             
             {/* Header */}
             <div className="p-5 border-b border-white/5">

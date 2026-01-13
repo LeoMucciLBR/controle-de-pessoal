@@ -80,7 +80,7 @@ export async function PUT(
   }
 }
 
-// DELETE - Remover pessoa
+// DELETE - Soft delete (marca como apagado, não remove do banco)
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -88,8 +88,10 @@ export async function DELETE(
   try {
     const { id } = await params;
     
-    await prisma.person.delete({
+    // Soft delete: marca como 'apagado' ao invés de deletar
+    await prisma.person.update({
       where: { id: parseInt(id) },
+      data: { status: 'apagado' },
     });
 
     return NextResponse.json({ success: true });

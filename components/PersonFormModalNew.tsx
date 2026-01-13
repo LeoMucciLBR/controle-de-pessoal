@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Person, PersonStatus, Contrato, Disciplina, AreaAtuacao } from '@/types/person';
 import {
   Dialog,
@@ -6,6 +6,16 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -109,6 +119,8 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
 
   const [formData, setFormData] = useState<Partial<Person>>(emptyPerson);
   const [activeTab, setActiveTab] = useState("personal");
+  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
     if (person) {
@@ -117,14 +129,38 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
       setFormData({ ...emptyPerson });
       setActiveTab("personal");
     }
+    setHasUnsavedChanges(false);
   }, [person, open]);
+
+  // Detectar mudanças no formulário
+  const handleChangeWithDirty = useCallback((field: keyof Person, value: any) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    setHasUnsavedChanges(true);
+  }, []);
+
+  // Interceptar fechamento do modal
+  const handleOpenChange = useCallback((newOpen: boolean) => {
+    if (!newOpen && hasUnsavedChanges) {
+      setShowExitConfirm(true);
+    } else {
+      onOpenChange(newOpen);
+    }
+  }, [hasUnsavedChanges, onOpenChange]);
+
+  const confirmExit = () => {
+    setShowExitConfirm(false);
+    setHasUnsavedChanges(false);
+    onOpenChange(false);
+  };
 
   const handleChange = (field: keyof Person, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    setHasUnsavedChanges(true);
   };
 
   const handleCheckboxChange = (field: keyof Person, checked: boolean) => {
       setFormData((prev) => ({ ...prev, [field]: checked }));
+      setHasUnsavedChanges(true);
   }
 
   const handleMultiSelect = (field: 'areas' | 'disciplinasProjeto' | 'disciplinasObra' | 'contratosAtivos', item: string, checked: boolean) => {
@@ -140,6 +176,7 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setHasUnsavedChanges(false);
     onSave(formData as Person);
     onOpenChange(false);
   };
@@ -155,8 +192,9 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
   const progressPercentage = ((currentTabIndex + 1) / navItems.length) * 100;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] h-auto p-0 gap-0 overflow-hidden border-0 bg-transparent shadow-none flex flex-col md:flex-row items-stretch">
+    <>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogContent className="max-w-6xl h-[85vh] p-0 gap-0 overflow-hidden border-0 bg-transparent shadow-none flex flex-col md:flex-row items-stretch">
         <DialogTitle className="sr-only">
             {person ? 'Editar Cadastro' : 'Novo Cadastro'}
         </DialogTitle>
@@ -295,13 +333,13 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
           </div>
 
           {/* Content Area */}
-          <div className="flex-1 flex flex-col bg-background min-h-[450px] md:min-h-[550px] relative overflow-hidden">
+          <div className="flex-1 flex flex-col bg-background h-full max-h-full relative overflow-hidden">
                {/* Background decorations */}
                <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2" />
                <div className="absolute bottom-0 left-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl pointer-events-none translate-y-1/2 -translate-x-1/2" />
                
-               <form onSubmit={handleSubmit} className="flex flex-col h-full relative">
-                  <div className="flex-1 p-6 md:p-8 overflow-y-auto custom-scrollbar">
+               <form onSubmit={handleSubmit} className="flex flex-col h-full max-h-full relative overflow-hidden">
+                  <div className="flex-1 p-6 md:p-8 overflow-y-auto overflow-x-hidden custom-scrollbar">
                       <AnimatePresence mode="wait">
                           {activeTab === 'personal' && (
                               <motion.div key="personal" {...fadeIn} className="max-w-3xl mx-auto">
@@ -504,12 +542,10 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                     animate="animate"
                                   >
                                       <motion.div variants={staggerItem} className="col-span-12 md:col-span-6">
-                                          <ModernSelect 
+                                          <StatusSelect 
                                             label="Status Atual" 
                                             value={formData.status} 
                                             onChange={(v) => handleChange('status', v)} 
-                                            options={['ativo', 'inativo', 'banco_de_dados', 'baixa_frequencia']} 
-                                            icon={Award}
                                           />
                                       </motion.div>
                                       <motion.div variants={staggerItem} className="col-span-12 md:col-span-6">
@@ -563,6 +599,71 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
                                             onToggle={(d, checked) => handleMultiSelect('disciplinasObra', d, checked)}
                                             color="from-orange-500 to-red-500"
                                           />
+                                      </motion.div>
+
+                                      {/* Treinamentos Section */}
+                                      <motion.div variants={staggerItem} className="col-span-12">
+                                        <div className="flex items-center gap-2 mb-4 mt-4">
+                                          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                                          <span className="text-xs text-muted-foreground uppercase tracking-wider">Treinamentos</span>
+                                          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                                        </div>
+                                        
+                                        <div className="space-y-4">
+                                          {/* Lista de treinamentos adicionados */}
+                                          {(formData.treinamentos || []).length > 0 && (
+                                            <div className="space-y-2">
+                                              {(formData.treinamentos || []).map((treinamento, index) => {
+                                                // Parse do formato "NOME|DATA"
+                                                const parts = treinamento.split('|');
+                                                const nome = parts[0] || treinamento;
+                                                const data = parts[1] || '';
+                                                
+                                                return (
+                                                  <motion.div
+                                                    key={index}
+                                                    initial={{ opacity: 0, x: -20 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10"
+                                                  >
+                                                    <div className="p-2 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20">
+                                                      <GraduationCap className="w-4 h-4 text-green-400" />
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                      <p className="text-sm font-medium text-foreground truncate">{nome}</p>
+                                                      {data && (
+                                                        <p className="text-xs text-muted-foreground">
+                                                          Realizado em: {new Date(data).toLocaleDateString('pt-BR')}
+                                                        </p>
+                                                      )}
+                                                    </div>
+                                                    <Button
+                                                      type="button"
+                                                      variant="ghost"
+                                                      size="sm"
+                                                      className="h-8 w-8 p-0 text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                                      onClick={() => {
+                                                        const updated = (formData.treinamentos || []).filter((_, i) => i !== index);
+                                                        handleChange('treinamentos', updated);
+                                                      }}
+                                                    >
+                                                      <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                  </motion.div>
+                                                );
+                                              })}
+                                            </div>
+                                          )}
+                                          
+                                          {/* Formulário para adicionar novo treinamento */}
+                                          <TrainingAddForm
+                                            treinamentosList={treinamentosList}
+                                            onAdd={(treinamento, data) => {
+                                              const entry = data ? `${treinamento}|${data}` : treinamento;
+                                              handleChange('treinamentos', [...(formData.treinamentos || []), entry]);
+                                            }}
+                                          />
+                                        </div>
                                       </motion.div>
                                   </motion.div>
                               </motion.div>
@@ -695,6 +796,30 @@ export function PersonFormModal({ person, open, onOpenChange, onSave }: PersonFo
         </div>
       </DialogContent>
     </Dialog>
+
+    {/* Confirmation Dialog for Unsaved Changes */}
+    <AlertDialog open={showExitConfirm} onOpenChange={setShowExitConfirm}>
+      <AlertDialogContent className="bg-background border border-white/10">
+        <AlertDialogHeader>
+          <AlertDialogTitle>Descartar alterações?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Você tem alterações não salvas. Tem certeza que deseja sair? Suas alterações serão perdidas.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel className="border-white/10 hover:bg-white/5">
+            Continuar Editando
+          </AlertDialogCancel>
+          <AlertDialogAction 
+            onClick={confirmExit}
+            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+          >
+            Descartar
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }
 
@@ -904,4 +1029,126 @@ function ToggleSwitch({ label, checked, onChange }: { label: string, checked?: b
             </motion.div>
         </div>
     )
+}
+
+function TrainingAddForm({ 
+  treinamentosList, 
+  onAdd 
+}: { 
+  treinamentosList: string[], 
+  onAdd: (treinamento: string, data: string) => void 
+}) {
+  const [selectedTreinamento, setSelectedTreinamento] = useState('');
+  const [dataTreinamento, setDataTreinamento] = useState('');
+
+  const handleAdd = () => {
+    if (selectedTreinamento) {
+      onAdd(selectedTreinamento, dataTreinamento);
+      setSelectedTreinamento('');
+      setDataTreinamento('');
+    }
+  };
+
+  return (
+    <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-4">
+      <div className="flex items-center gap-2 text-sm font-medium text-foreground">
+        <Plus className="w-4 h-4 text-primary" />
+        Adicionar Treinamento
+      </div>
+      
+      <div className="grid grid-cols-12 gap-3">
+        <div className="col-span-12 md:col-span-6">
+          <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
+            Treinamento
+          </Label>
+          <Select value={selectedTreinamento} onValueChange={setSelectedTreinamento}>
+            <SelectTrigger className="h-11 rounded-xl border-white/10 bg-white/5 hover:bg-white/[0.07] focus:bg-white/10 transition-all focus:ring-0 focus:border-primary/50 shadow-sm">
+              <SelectValue placeholder="Selecione o treinamento" />
+            </SelectTrigger>
+            <SelectContent className="bg-background border border-white/10 rounded-xl shadow-xl backdrop-blur-xl">
+              {treinamentosList.map(t => (
+                <SelectItem 
+                  key={t} 
+                  value={t} 
+                  className="focus:bg-primary/10 cursor-pointer rounded-lg mx-1 my-0.5"
+                >
+                  {t}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        
+        <div className="col-span-12 md:col-span-4">
+          <Label className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2 block">
+            Data de Realização
+          </Label>
+          <Input
+            type="date"
+            value={dataTreinamento}
+            onChange={(e) => setDataTreinamento(e.target.value)}
+            className="h-11 rounded-xl border-white/10 bg-white/5 hover:bg-white/[0.07] focus:bg-white/10 transition-all focus:ring-0 focus:border-primary/50 text-sm shadow-sm"
+          />
+        </div>
+        
+        <div className="col-span-12 md:col-span-2 flex items-end">
+          <Button
+            type="button"
+            onClick={handleAdd}
+            disabled={!selectedTreinamento}
+            className="w-full h-11 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white rounded-xl shadow-lg shadow-green-500/25 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <Plus className="w-4 h-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Status options mapping - valores como estão no banco de dados
+const statusOptions = [
+  { value: 'ativo', label: 'Ativo' },
+  { value: 'inativo', label: 'Inativo' },
+  { value: 'banco de dados', label: 'Banco de Dados' },
+  { value: 'baixa frequencia', label: 'Baixa Frequência' },
+];
+
+function StatusSelect({ 
+  label, 
+  value, 
+  onChange 
+}: { 
+  label: string, 
+  value: string | undefined, 
+  onChange: (v: string) => void 
+}) {
+  const selectedOption = statusOptions.find(opt => opt.value === value);
+  
+  return (
+    <div className="group space-y-2">
+      <Label className="text-xs font-medium text-muted-foreground group-focus-within:text-primary transition-colors ml-0.5 uppercase tracking-wider flex items-center gap-2">
+        <Award className="w-3 h-3" />
+        {label}
+      </Label>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className="h-11 rounded-xl border-white/10 bg-white/5 hover:bg-white/[0.07] focus:bg-white/10 transition-all focus:ring-0 focus:border-primary/50 shadow-sm">
+          <SelectValue placeholder="Selecione o status">
+            {selectedOption?.label || 'Selecione'}
+          </SelectValue>
+        </SelectTrigger>
+        <SelectContent className="bg-background border border-white/10 rounded-xl shadow-xl backdrop-blur-xl">
+          {statusOptions.map(opt => (
+            <SelectItem 
+              key={opt.value} 
+              value={opt.value} 
+              className="focus:bg-primary/10 cursor-pointer rounded-lg mx-1 my-0.5"
+            >
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
 }
